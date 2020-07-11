@@ -1,7 +1,7 @@
 # csc413-tankgame
 
-## Student Name  : 
-## Student ID    :
+## Student Name  :  Amily Wu
+## Student ID    : 916929226
 
 
 ## src folder is to be used for source code only.
