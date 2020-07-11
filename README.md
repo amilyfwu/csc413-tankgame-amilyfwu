@@ -1,6 +1,6 @@
 # csc413-tankgame
 
-## Student Name  :
+## Student Name  : 
 ## Student ID    :
 
 
