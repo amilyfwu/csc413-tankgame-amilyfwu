@@ -61,12 +61,12 @@ public class Launcher {
         this.gamePanel.gameInitialize(); // initialize game, but DO NOT start game
         this.endPanel = new EndGamePanel(this); // create a new end game pane;
         cl = new CardLayout(); // creating a new CardLayout Panel
-        this.jf.setResizable(false); //make the JFrame not resizable
         this.mainPanel.setLayout(cl); // set the layout of the main panel to our card layout
         this.mainPanel.add(startPanel, "start"); //add the start panel to the main panel
         this.mainPanel.add(gamePanel, "game");   //add the game panel to the main panel
         this.mainPanel.add(endPanel, "end");    // add the end game panel to the main panel
         this.jf.add(mainPanel); // add the main panel to the JFrame
+        this.jf.setResizable(false); //make the JFrame not resizable
         this.setFrame("start"); // set the current panel to start panel
     }
 
