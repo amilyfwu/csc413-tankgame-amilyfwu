@@ -148,6 +148,10 @@ public class Tank{
         rotation.rotate(Math.toRadians(angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(this.img, rotation, null);
+        //added 46:00
+        g2d.setColor(Color.BLUE);
+        //g2d.rotate(Math.toRadians(angle), bounds.x + bounds.width/2, bounds.y + bounds.height/2);
+        g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
     }
 
 
