@@ -43,16 +43,18 @@ public class Bullet {
             y = GameConstants.GAME_SCREEN_HEIGHT - 80;
         }
     }
+
     public void update(){
         moveForwards();
+        //if it hits something it disappears
     }
+
     public void drawImage(Graphics g){
         AffineTransform rotation = AffineTransform.getTranslateInstance(x,y);
         rotation.rotate(Math.toRadians(angle), this.bulletImage.getWidth()/2.0, this.bulletImage.getHeight()/2.0);
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(this.bulletImage, rotation, null);
         //added from video
-
         //
         g2d.setColor(Color.RED);
         g2d.drawRect(x, y, this.bulletImage.getWidth(),this.bulletImage.getHeight());

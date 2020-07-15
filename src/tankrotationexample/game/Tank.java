@@ -7,12 +7,13 @@ import tankrotationexample.GameConstants;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  *
  * @author anthony-pc
  */
-public class Tank{
+public class Tank extends Moveable{
 
 
     private int x;
@@ -23,14 +24,16 @@ public class Tank{
 
     private final int R = 2;
     private final float ROTATIONSPEED = 3.0f;
-
-
+    //
+    private Rectangle hitBox;
+    private ArrayList<Bullet> ammo;
 
     private BufferedImage img;
     private boolean UpPressed;
     private boolean DownPressed;
     private boolean RightPressed;
     private boolean LeftPressed;
+    private boolean ShootPressed;
 
 
     Tank(int x, int y, int vx, int vy, int angle, BufferedImage img) {
@@ -40,7 +43,13 @@ public class Tank{
         this.vy = vy;
         this.img = img;
         this.angle = angle;
+        this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
+        this.ammo = new ArrayList<>();
 
+    }
+
+    public Rectangle getHitBox(){
+        return hitBox.getBounds();
     }
 
     void setX(int x){ this.x = x; }
@@ -63,6 +72,10 @@ public class Tank{
         this.LeftPressed = true;
     }
 
+    void toggleShootPressed(){
+        this.ShootPressed = true;
+    }
+
     void unToggleUpPressed() {
         this.UpPressed = false;
     }
@@ -79,6 +92,10 @@ public class Tank{
         this.LeftPressed = false;
     }
 
+    void unToggleShootPressed(){
+        this.ShootPressed = false;
+    }
+
     void update() {
         if (this.UpPressed) {
             this.moveForwards();
@@ -93,6 +110,14 @@ public class Tank{
         if (this.RightPressed) {
             this.rotateRight();
         }
+        if(this.ShootPressed && TRE.tick % 20 == 0){
+            Bullet b = new Bullet(x,y, (int) angle, TRE.bulletImage);
+            this.ammo.add(b);
+        }
+        this.ammo.forEach(bullet -> bullet.update());
+ //       for(int i = 0 ; i < this.ammo.size(); i++){
+ //           this.ammo.get(i).update();
+ //           }
     }
 
     private void rotateLeft() {
@@ -109,6 +134,7 @@ public class Tank{
         x -= vx;
         y -= vy;
         checkBorder();
+        this.hitBox.setLocation(x,y);
     }
 
     private void moveForwards() {
@@ -117,12 +143,10 @@ public class Tank{
         x += vx;
         y += vy;
         checkBorder();
+        this.hitBox.setLocation(x,y);
     }
 
-
-
-
-    private void checkBorder() {
+    void checkBorder() {
         if (x < 30) {
             x = 30;
         }
@@ -150,6 +174,14 @@ public class Tank{
         g2d.drawImage(this.img, rotation, null);
         //added 46:00
         g2d.setColor(Color.BLUE);
+        //Handling maps vid
+        //if (b!= null) b.drawImage(g);
+        this.ammo.forEach(bullet -> bullet.drawImage(g));
+  //      for(int i = 0; i< this.ammo.size();i++){
+  //          this.ammo.get(i).drawImage(g);
+  //      }
+        //
+
         //g2d.rotate(Math.toRadians(angle), bounds.x + bounds.width/2, bounds.y + bounds.height/2);
         g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
     }

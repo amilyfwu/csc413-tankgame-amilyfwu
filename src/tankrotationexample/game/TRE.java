@@ -28,12 +28,14 @@ import static javax.imageio.ImageIO.read;
  */
 public class TRE extends JPanel implements Runnable {
 
+    public static final int WORLD_WIDTH = 2000;
+    public static final int WORLD_HEIGHT = 2000;
     private BufferedImage world; //the black screen
     private Tank t1;
     private Tank t2; //added
     private Launcher lf;
-    private long tick = 0;
-    //public static BufferedImage bulletImage;
+    static long tick = 0; //this was private long static previously
+    public static BufferedImage bulletImage;
     ArrayList<Wall> walls;
 
 
@@ -74,8 +76,8 @@ public class TRE extends JPanel implements Runnable {
         this.tick = 0;
         this.t1.setX(200);
         this.t1.setY(200);
-        this.t2.setX(1000);
-        this.t2.setY(800);
+        this.t2.setX(600);
+        this.t2.setY(600);
     }
 
 
@@ -83,7 +85,7 @@ public class TRE extends JPanel implements Runnable {
      * Load all resources for Tank Wars Game. Set all Game Objects to their
      * initial state as well.
      */
-    public void gameInitialize() { //have to change the width and height later
+    public void gameInitialize() { //have to change the width and height later to world width and height
         this.world = new BufferedImage(GameConstants.GAME_SCREEN_WIDTH,
                                        GameConstants.GAME_SCREEN_HEIGHT,
                                        BufferedImage.TYPE_INT_RGB);
@@ -100,11 +102,14 @@ public class TRE extends JPanel implements Runnable {
              */
             t1img = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tank1.png")));
             t2img = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tank2.png")));
+            TRE.bulletImage = read(TRE.class.getClassLoader().getResource("bullet1.png"));
             breakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile4.png")));
             unBreakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile2.png")));
 
-            InputStreamReader isr = new InputStreamReader(TRE.class.getClassLoader().getResourceAsStream("maps/map1.txt"));
+
+            InputStreamReader isr = new InputStreamReader(TRE.class.getClassLoader().getResourceAsStream("maps/map2.txt"));
             BufferedReader mapReader = new BufferedReader(isr);
+
             String row = mapReader.readLine();
             if(row == null){
                 throw new IOException("no data in file");
@@ -112,18 +117,19 @@ public class TRE extends JPanel implements Runnable {
             String[] mapInfo = row.split("\t");
             int numCols = Integer.parseInt(mapInfo[0]);
             int numRows = Integer.parseInt(mapInfo[1]);
+           //System.out.println(numCols + " " + numRows);
             for(int curRow = 0; curRow < numRows; curRow++ ){
                 row = mapReader.readLine();
                 mapInfo = row.split("\t");
                 for(int curCol = 0; curCol < numCols; curCol++ ){
                     switch (mapInfo[curCol]){
                         case "2":
-                            Breakable br = new Breakable(curCol*30, curRow*30, breakableWall);
+                            Breakable br = new Breakable(curCol*32, curRow*32, breakableWall);
                             this.walls.add(br);
                             break;
                         case "3":
                         case "9":
-                            Unbreakable unBr = new Unbreakable(curCol*30, curRow*30, unBreakableWall);
+                            Unbreakable unBr = new Unbreakable(curCol*32, curRow*32, unBreakableWall);
                             this.walls.add(unBr);
                             break;
 
@@ -137,7 +143,7 @@ public class TRE extends JPanel implements Runnable {
         }
 
         t1 = new Tank(200, 200, 0, 0, 0, t1img);
-        t2 = new Tank(1000, 800, 0, 0, 180, t2img); //should be a different image
+        t2 = new Tank(600, 600, 0, 0, 180, t2img); //should be a different image
         TankControl tc1 = new TankControl(t1, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
         TankControl tc2 = new TankControl(t2, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
         this.setBackground(Color.BLACK);
@@ -146,6 +152,9 @@ public class TRE extends JPanel implements Runnable {
         //make a t2 - from starter code demo video 37:21-ish
     }
 
+    public long getTick(){
+        return tick;
+    }
 
     @Override
     public void paintComponent(Graphics g) {
