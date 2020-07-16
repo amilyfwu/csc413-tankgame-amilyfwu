@@ -1,15 +1,14 @@
 package tankrotationexample.game;
 
+import tankrotationexample.GameConstants;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class Moveable {
-    private int x;
-    private int y;
-    private int vx;
-    private int vy;
-    private float angle;
-    private final int R = 7;
+    protected int x, y, vx, vy;
+    protected float angle;
+    protected int R;
     Rectangle hitBox;
     BufferedImage img;
 
@@ -21,13 +20,25 @@ public abstract class Moveable {
         this.angle = angle;
         this.img = img;
         this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
+
     }
 
     abstract void moveForwards();
     abstract void update();
-    abstract void drawImage();
+    abstract void drawImage(Graphics g);
     private void checkBorder(){
-
+        if (x < 30) {
+            x = 30;
+        }
+        if (x >= GameConstants.GAME_SCREEN_WIDTH - 88) {
+            x = GameConstants.GAME_SCREEN_WIDTH - 88;
+        }
+        if (y < 40) {
+            y = 40;
+        }
+        if (y >= GameConstants.GAME_SCREEN_HEIGHT - 80) {
+            y = GameConstants.GAME_SCREEN_HEIGHT - 80;
+        }
     }
     void moveForwardOrBackward(){
         vx = (int) Math.round(R*Math.cos(Math.toRadians(angle)));
