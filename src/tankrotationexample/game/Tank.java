@@ -53,6 +53,14 @@ public class Tank extends Moveable{
 
     void setY(int y) { this. y = y;}
 
+    int getX(){
+        return x;
+    }
+
+    int getY(){
+        return y;
+    }
+
     void toggleUpPressed() {
         this.UpPressed = true;
     }
@@ -125,15 +133,20 @@ public class Tank extends Moveable{
         this.angle += this.ROTATIONSPEED;
     }
 
-    private void moveBackwards() {
-        //vx = (int) Math.round(R*Math.cos(Math.toRadians(angle)));
-        //vy = (int) Math.round(R*Math.sin(Math.toRadians(angle)));
-        //x += vx;
-        //y += vy;
-        //checkBorder();
-        //this.hitBox.setLocation(x,y);
+    @Override
+    void setR(){
         R = 2;
-        moveForwardOrBackward();
+    }
+
+    private void moveBackwards() {
+//        vx = (int) Math.round(R*Math.cos(Math.toRadians(angle)));
+//        vy = (int) Math.round(R*Math.sin(Math.toRadians(angle)));
+//        x -= vx;
+//        y -= vy;
+//        checkBorder();
+//        this.hitBox.setLocation(x,y);
+        setR();
+        moveBackward();
     }
 
     void moveForwards() {
@@ -143,8 +156,8 @@ public class Tank extends Moveable{
         //y += vy;
         //checkBorder();
         //this.hitBox.setLocation(x,y);
-        R = 2;
-        moveForwardOrBackward();
+        setR();
+        moveForward();
 
     }
     //void checkBorder was here

@@ -12,6 +12,7 @@ public class Bullet extends Moveable {
     //int R = 7;
     //BufferedImage img;
     //Rectangle hitBox;
+    Boolean show;
 
     public Bullet(int x, int y, int vx, int vy, float angle, BufferedImage img) {
         //this.x = x;
@@ -20,11 +21,17 @@ public class Bullet extends Moveable {
         //this.img = img;
         //this.hitBox = new Rectangle(x,y, this.img.getWidth(),this.img.getHeight());
         super(x,y,vx,vy,angle,img);
+        this.show = true;
     }
 
-    public void moveForwards(){
+    @Override
+    void setR(){
         R = 7;
-        moveForwardOrBackward();
+    }
+
+    void moveForwards(){
+        setR();
+        moveForward();
     }
 
     //void checkBorder was here

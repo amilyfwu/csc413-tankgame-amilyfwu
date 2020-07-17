@@ -28,8 +28,6 @@ import static javax.imageio.ImageIO.read;
  */
 public class TRE extends JPanel implements Runnable {
 
-    public static final int WORLD_WIDTH = 2000;
-    public static final int WORLD_HEIGHT = 2000;
     private BufferedImage world; //the black screen
     private Tank t1;
     private Tank t2; //added
@@ -37,6 +35,10 @@ public class TRE extends JPanel implements Runnable {
     static long tick = 0; //this was private long static previously
     public static BufferedImage bulletImage;
     ArrayList<Wall> walls;
+    int rightHalfTankX;
+    int rightHalfTankY;
+    int leftHalfTankX;
+    int leftHalfTankY;
 
 
     public TRE(Launcher lf){
@@ -86,8 +88,8 @@ public class TRE extends JPanel implements Runnable {
      * initial state as well.
      */
     public void gameInitialize() { //have to change the width and height later to world width and height
-        this.world = new BufferedImage(GameConstants.GAME_SCREEN_WIDTH,
-                                       GameConstants.GAME_SCREEN_HEIGHT,
+        this.world = new BufferedImage(GameConstants.WORLD_WIDTH,
+                                       GameConstants.WORLD_HEIGHT,
                                        BufferedImage.TYPE_INT_RGB);
 
         BufferedImage t1img = null;
@@ -156,18 +158,58 @@ public class TRE extends JPanel implements Runnable {
         return tick;
     }
 
+    private int checkBorderScreenX(int x1){
+        System.out.println("x: " + x1);
+        if (x1 < 0) {
+            x1 = 0;
+            return x1;
+        }
+        if (x1 >= GameConstants.WORLD_WIDTH - 512) { //apparently it was screen width/2
+            x1 = GameConstants.WORLD_WIDTH - 512;
+            return x1;
+        }
+        return x1;
+    }
+    private int checkBorderScreenY(int y1){
+        System.out.println("y: " + y1);
+        if (y1 < 0) {
+            y1 = 0;
+            return y1;
+        }
+        if (y1 >= GameConstants.WORLD_HEIGHT - 768) { //screen height
+            y1 = GameConstants.WORLD_HEIGHT - 768;
+            System.out.println("yfsdf :" + y1);
+            return y1;
+        }
+        return y1;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         super.paintComponent(g2); //added
         Graphics2D buffer = world.createGraphics();
         buffer.setColor(Color.BLACK);
-        buffer.fillRect(0,0,GameConstants.GAME_SCREEN_WIDTH,GameConstants.GAME_SCREEN_HEIGHT);
+        buffer.fillRect(0,0,GameConstants.WORLD_WIDTH,GameConstants.WORLD_HEIGHT);
         this.walls.forEach(wall -> wall.drawImage(buffer));
         this.t1.drawImage(buffer);
         this.t2.drawImage(buffer);
-        //world.getSubimage();
-        g2.drawImage(world,0,0,null);
+//        rightHalfTankX = t2.getX() - 200;
+//        rightHalfTankY = t2.getY() - 200;
+//        leftHalfTankX = t1.getX() - 200;
+//        leftHalfTankY = t1.getY() - 200;
+//        System.out.println("right x "+ rightHalfTankX + " y "+ rightHalfTankY + " left x "+ leftHalfTankX+" y " + leftHalfTankY);
+//        checkBorderScreen(rightHalfTankX,rightHalfTankY);
+//        checkBorderScreen(leftHalfTankX,leftHalfTankY);
+        //System.out.println(t1.getX() + " "+ t1.getY());
+        BufferedImage leftHalf = world.getSubimage(checkBorderScreenX(t1.getX() - GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(t1.getY() - GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
+        BufferedImage rightHalf = world.getSubimage(500,500,GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
+        BufferedImage miniMap = world.getSubimage(0,0,GameConstants.WORLD_WIDTH,GameConstants.WORLD_HEIGHT);
+        g2.drawImage(leftHalf,0,0,null);
+        g2.drawImage(rightHalf,GameConstants.GAME_SCREEN_WIDTH/2 + 6,0,null);
+        g2.scale(.10,.10);
+        g2.drawImage(miniMap,2000,2000,null);
+
     }
 
 }

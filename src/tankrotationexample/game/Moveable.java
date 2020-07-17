@@ -25,26 +25,35 @@ public abstract class Moveable {
 
     abstract void moveForwards();
     abstract void update();
+    abstract void setR();
     abstract void drawImage(Graphics g);
     private void checkBorder(){
         if (x < 30) {
             x = 30;
         }
-        if (x >= GameConstants.GAME_SCREEN_WIDTH - 88) {
-            x = GameConstants.GAME_SCREEN_WIDTH - 88;
+        if (x >= GameConstants.WORLD_WIDTH - 88) {
+            x = GameConstants.WORLD_WIDTH - 88;
         }
         if (y < 40) {
             y = 40;
         }
-        if (y >= GameConstants.GAME_SCREEN_HEIGHT - 80) {
-            y = GameConstants.GAME_SCREEN_HEIGHT - 80;
+        if (y >= GameConstants.WORLD_HEIGHT- 80) {
+            y = GameConstants.WORLD_HEIGHT - 80;
         }
     }
-    void moveForwardOrBackward(){
+    void moveForward(){
         vx = (int) Math.round(R*Math.cos(Math.toRadians(angle)));
         vy = (int) Math.round(R*Math.sin(Math.toRadians(angle)));
         x += vx;
         y += vy;
+        checkBorder();
+        this.hitBox.setLocation(x,y);
+    }
+    void moveBackward(){
+        vx = (int) Math.round(R*Math.cos(Math.toRadians(angle)));
+        vy = (int) Math.round(R*Math.sin(Math.toRadians(angle)));
+        x -= vx;
+        y -= vy;
         checkBorder();
         this.hitBox.setLocation(x,y);
     }
