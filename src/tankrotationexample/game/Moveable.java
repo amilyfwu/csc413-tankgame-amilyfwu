@@ -27,6 +27,11 @@ public abstract class Moveable {
     abstract void update();
     abstract void setR();
     abstract void drawImage(Graphics g);
+
+    public Rectangle getHitBox(){
+        return hitBox.getBounds();
+    }
+
     private void checkBorder(){
         if (x < 30) {
             x = 30;

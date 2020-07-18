@@ -45,10 +45,6 @@ public class Tank extends Moveable{
 
     }
 
-    public Rectangle getHitBox(){
-        return hitBox.getBounds();
-    }
-
     void setX(int x){ this.x = x; }
 
     void setY(int y) { this. y = y;}

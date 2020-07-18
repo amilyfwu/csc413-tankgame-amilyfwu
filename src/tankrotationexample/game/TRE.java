@@ -35,11 +35,6 @@ public class TRE extends JPanel implements Runnable {
     static long tick = 0; //this was private long static previously
     public static BufferedImage bulletImage;
     ArrayList<Wall> walls;
-    int rightHalfTankX;
-    int rightHalfTankY;
-    int leftHalfTankX;
-    int leftHalfTankY;
-
 
     public TRE(Launcher lf){
         this.lf = lf;
@@ -54,6 +49,9 @@ public class TRE extends JPanel implements Runnable {
                 this.t1.update(); // update tank
                 this.t2.update(); // update tank
                 this.repaint();   // redraw game
+               if(this.t1.getHitBox().intersects(this.t2.getHitBox())){
+                   System.out.println("tanks are colliding");
+               }
                 Thread.sleep(1000 / 144); //sleep for a few milliseconds
                 //System.out.println(t1);
                 /*
@@ -194,16 +192,8 @@ public class TRE extends JPanel implements Runnable {
         this.walls.forEach(wall -> wall.drawImage(buffer));
         this.t1.drawImage(buffer);
         this.t2.drawImage(buffer);
-//        rightHalfTankX = t2.getX() - 200;
-//        rightHalfTankY = t2.getY() - 200;
-//        leftHalfTankX = t1.getX() - 200;
-//        leftHalfTankY = t1.getY() - 200;
-//        System.out.println("right x "+ rightHalfTankX + " y "+ rightHalfTankY + " left x "+ leftHalfTankX+" y " + leftHalfTankY);
-//        checkBorderScreen(rightHalfTankX,rightHalfTankY);
-//        checkBorderScreen(leftHalfTankX,leftHalfTankY);
-        //System.out.println(t1.getX() + " "+ t1.getY());
         BufferedImage leftHalf = world.getSubimage(checkBorderScreenX(t1.getX() - GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(t1.getY() - GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
-        BufferedImage rightHalf = world.getSubimage(500,500,GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
+        BufferedImage rightHalf = world.getSubimage(checkBorderScreenX(t2.getX()-GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(t2.getY()-GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
         BufferedImage miniMap = world.getSubimage(0,0,GameConstants.WORLD_WIDTH,GameConstants.WORLD_HEIGHT);
         g2.drawImage(leftHalf,0,0,null);
         g2.drawImage(rightHalf,GameConstants.GAME_SCREEN_WIDTH/2 + 6,0,null);
