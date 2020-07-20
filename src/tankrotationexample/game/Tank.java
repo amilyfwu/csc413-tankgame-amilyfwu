@@ -115,13 +115,21 @@ public class Tank extends Moveable{
         if(this.collide){
             if(this.UpPressed){
                 this.moveBackwards();
-                this.x-=2;
-                this.y-=2;
+                this.moveBackwards();
+                this.moveBackwards();
+                this.moveBackwards();
+                this.moveBackwards();
+                //this.x-=2;
+                //this.y-=2;
             }
             if (this.DownPressed){
                 this.moveForwards();
-                this.x+=2;
-                this.y+=2;
+                this.moveForwards();
+                this.moveForwards();
+                this.moveForwards();
+                this.moveForwards();
+                //this.x+=2;
+                //this.y+=2;
             }
             this.collide = false;
         }else {
