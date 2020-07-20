@@ -11,6 +11,7 @@ public abstract class Moveable {
     protected int R;
     Rectangle hitBox;
     BufferedImage img;
+    protected boolean collide = false;
 
     public Moveable(int x, int y, int vx, int vy, float angle, BufferedImage img) {
         this.x = x;
@@ -46,6 +47,7 @@ public abstract class Moveable {
             y = GameConstants.WORLD_HEIGHT - 80;
         }
     }
+
     void moveForward(){
         vx = (int) Math.round(R*Math.cos(Math.toRadians(angle)));
         vy = (int) Math.round(R*Math.sin(Math.toRadians(angle)));

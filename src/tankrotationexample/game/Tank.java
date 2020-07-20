@@ -30,6 +30,7 @@ public class Tank extends Moveable{
     private boolean RightPressed;
     private boolean LeftPressed;
     private boolean ShootPressed;
+    private boolean collide;
 
 
     Tank(int x, int y, int vx, int vy, float angle, BufferedImage img) {
@@ -49,12 +50,25 @@ public class Tank extends Moveable{
 
     void setY(int y) { this. y = y;}
 
+    void setVx(int vx){
+        this.vx = vx;
+    }
+    void setVy(int vy){
+        this.vy = vy;
+    }
     int getX(){
         return x;
     }
 
     int getY(){
         return y;
+    }
+
+    public boolean isUpPressed(){
+        return UpPressed;
+    }
+    public boolean isDownPressed(){
+        return DownPressed;
     }
 
     void toggleUpPressed() {
@@ -98,11 +112,25 @@ public class Tank extends Moveable{
     }
 
     void update() {
-        if (this.UpPressed) {
-            this.moveForwards();
-        }
-        if (this.DownPressed) {
-            this.moveBackwards();
+        if(this.collide){
+            if(this.UpPressed){
+                this.moveBackwards();
+                this.x-=2;
+                this.y-=2;
+            }
+            if (this.DownPressed){
+                this.moveForwards();
+                this.x+=2;
+                this.y+=2;
+            }
+            this.collide = false;
+        }else {
+            if (this.UpPressed) {
+                this.moveForwards();
+            }
+            if (this.DownPressed) {
+                this.moveBackwards();
+            }
         }
 
         if (this.LeftPressed) {
@@ -120,6 +148,11 @@ public class Tank extends Moveable{
  //           this.ammo.get(i).update();
  //           }
     }
+
+    void setCollision(boolean collide){
+        this.collide = collide;
+    }
+
 
     private void rotateLeft() {
         this.angle -= this.ROTATIONSPEED;
@@ -174,6 +207,7 @@ public class Tank extends Moveable{
         //Handling maps vid
         //if (b!= null) b.drawImage(g);
         this.ammo.forEach(bullet -> bullet.drawImage(g));
+        //use ammo.remove() to remove the bullet on screen
         //g2d.rotate(Math.toRadians(angle), bounds.x + bounds.width/2, bounds.y + bounds.height/2);
         g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
     }

@@ -35,6 +35,7 @@ public class TRE extends JPanel implements Runnable {
     static long tick = 0; //this was private long static previously
     public static BufferedImage bulletImage;
     ArrayList<Wall> walls;
+     private boolean collide;
 
     public TRE(Launcher lf){
         this.lf = lf;
@@ -49,8 +50,11 @@ public class TRE extends JPanel implements Runnable {
                 this.t1.update(); // update tank
                 this.t2.update(); // update tank
                 this.repaint();   // redraw game
+
                if(this.t1.getHitBox().intersects(this.t2.getHitBox())){
                    System.out.println("tanks are colliding");
+                   this.t1.setCollision(true);
+                   this.t2.setCollision(true);
                }
                 Thread.sleep(1000 / 144); //sleep for a few milliseconds
                 //System.out.println(t1);
