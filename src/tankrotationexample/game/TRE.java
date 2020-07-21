@@ -35,7 +35,6 @@ public class TRE extends JPanel implements Runnable {
     static long tick = 0; //this was private long static previously
     public static BufferedImage bulletImage;
     ArrayList<Wall> walls;
-     private boolean collide;
 
     public TRE(Launcher lf){
         this.lf = lf;
@@ -51,11 +50,23 @@ public class TRE extends JPanel implements Runnable {
                 this.t2.update(); // update tank
                 this.repaint();   // redraw game
 
-               if(this.t1.getHitBox().intersects(this.t2.getHitBox())){
+               if(this.t1.getHitBox().intersects(this.t2.getHitBox())){ //check for tank collisions
                    System.out.println("tanks are colliding");
                    this.t1.setCollision(true);
                    this.t2.setCollision(true);
                }
+               for(int i = 0; i<this.walls.size() ;i++){
+                   if(this.walls.get(i).getHitBox().intersects(this.t1.getHitBox())){
+                       this.t1.setCollision(true);
+                       break;
+                   }
+                   if(this.walls.get(i).getHitBox().intersects(this.t2.getHitBox())){
+                       this.t2.setCollision(true);
+                       break;
+                   }
+                   //if()
+               }
+
                 Thread.sleep(1000 / 144); //sleep for a few milliseconds
                 //System.out.println(t1);
                 /*
@@ -148,12 +159,12 @@ public class TRE extends JPanel implements Runnable {
 
         t1 = new Tank(200, 200, 0, 0, 0, t1img);
         t2 = new Tank(600, 600, 0, 0, 180, t2img); //should be a different image
-        TankControl tc1 = new TankControl(t1, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
-        TankControl tc2 = new TankControl(t2, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+        TankControl tc1 = new TankControl(t1, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+        TankControl tc2 = new TankControl(t2, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
+
         this.setBackground(Color.BLACK);
         this.lf.getJf().addKeyListener(tc1);
         this.lf.getJf().addKeyListener(tc2);
-        //make a t2 - from starter code demo video 37:21-ish
     }
 
     public long getTick(){
@@ -161,7 +172,7 @@ public class TRE extends JPanel implements Runnable {
     }
 
     private int checkBorderScreenX(int x1){
-        System.out.println("x: " + x1);
+        //System.out.println("x: " + x1);
         if (x1 < 0) {
             x1 = 0;
             return x1;
@@ -173,14 +184,14 @@ public class TRE extends JPanel implements Runnable {
         return x1;
     }
     private int checkBorderScreenY(int y1){
-        System.out.println("y: " + y1);
+        //System.out.println("y: " + y1);
         if (y1 < 0) {
             y1 = 0;
             return y1;
         }
         if (y1 >= GameConstants.WORLD_HEIGHT - 768) { //screen height
             y1 = GameConstants.WORLD_HEIGHT - 768;
-            System.out.println("yfsdf :" + y1);
+            //System.out.println("yfsdf :" + y1);
             return y1;
         }
         return y1;
@@ -202,7 +213,7 @@ public class TRE extends JPanel implements Runnable {
         g2.drawImage(leftHalf,0,0,null);
         g2.drawImage(rightHalf,GameConstants.GAME_SCREEN_WIDTH/2 + 6,0,null);
         g2.scale(.10,.10);
-        g2.drawImage(miniMap,2000,2000,null);
+        g2.drawImage(miniMap,3000,3000,null);
 
     }
 

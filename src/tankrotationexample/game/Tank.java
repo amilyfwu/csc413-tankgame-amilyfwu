@@ -50,12 +50,10 @@ public class Tank extends Moveable{
 
     void setY(int y) { this. y = y;}
 
-    void setVx(int vx){
-        this.vx = vx;
+    void setCollision(boolean collide){
+        this.collide = collide;
     }
-    void setVy(int vy){
-        this.vy = vy;
-    }
+
     int getX(){
         return x;
     }
@@ -111,32 +109,28 @@ public class Tank extends Moveable{
         this.ShootPressed = false;
     }
 
+    void doCollision(){
+        if(this.UpPressed){
+            for(int i = 0; i<=10; i++){
+                this.moveBackwards();
+            }
+        }
+        if (this.DownPressed){
+            for(int i = 0; i<=10; i++){
+                this.moveForwards();
+            }
+        }
+        this.collide = false;
+    }
+
     void update() {
         if(this.collide){
-            if(this.UpPressed){
-                this.moveBackwards();
-                this.moveBackwards();
-                this.moveBackwards();
-                this.moveBackwards();
-                this.moveBackwards();
-                //this.x-=2;
-                //this.y-=2;
-            }
-            if (this.DownPressed){
-                this.moveForwards();
-                this.moveForwards();
-                this.moveForwards();
-                this.moveForwards();
-                this.moveForwards();
-                //this.x+=2;
-                //this.y+=2;
-            }
-            this.collide = false;
+            doCollision();
         }else {
-            if (this.UpPressed) {
+            if (this.UpPressed && !(this.LeftPressed || this.RightPressed)) {
                 this.moveForwards();
             }
-            if (this.DownPressed) {
+            if (this.DownPressed && !(this.LeftPressed || this.RightPressed)) {
                 this.moveBackwards();
             }
         }
@@ -147,6 +141,7 @@ public class Tank extends Moveable{
         if (this.RightPressed) {
             this.rotateRight();
         }
+
         if(this.ShootPressed && TRE.tick % 20 == 0){
             Bullet b = new Bullet(x,y,vx,vy,angle, TRE.bulletImage);
             this.ammo.add(b);
@@ -156,11 +151,6 @@ public class Tank extends Moveable{
  //           this.ammo.get(i).update();
  //           }
     }
-
-    void setCollision(boolean collide){
-        this.collide = collide;
-    }
-
 
     private void rotateLeft() {
         this.angle -= this.ROTATIONSPEED;
@@ -216,7 +206,7 @@ public class Tank extends Moveable{
         //if (b!= null) b.drawImage(g);
         this.ammo.forEach(bullet -> bullet.drawImage(g));
         //use ammo.remove() to remove the bullet on screen
-        //g2d.rotate(Math.toRadians(angle), bounds.x + bounds.width/2, bounds.y + bounds.height/2);
+
         g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
     }
 

@@ -11,7 +11,6 @@ public abstract class Moveable {
     protected int R;
     Rectangle hitBox;
     BufferedImage img;
-    protected boolean collide = false;
 
     public Moveable(int x, int y, int vx, int vy, float angle, BufferedImage img) {
         this.x = x;
@@ -64,4 +63,6 @@ public abstract class Moveable {
         checkBorder();
         this.hitBox.setLocation(x,y);
     }
+
+
 }

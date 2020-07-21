@@ -4,15 +4,17 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Breakable extends Wall{
-    int x, y;
-    BufferedImage wallImage;
-    int state = 2;
+    //int x, y;
+    //BufferedImage wallImage;
+    //int state = 2;
 
     public Breakable(int x, int y, BufferedImage wallImage) {
-        this.x = x;
-        this.y = y;
-        this.wallImage = wallImage;
+        super(x,y,wallImage);
     }
+
+    //if bullet hits it remove the wall from the list otherwise act as a wall
+
+
 
     @Override
     public void drawImage(Graphics g){
@@ -22,5 +24,10 @@ public class Breakable extends Wall{
         }else if(state == 1){
 
         }
+    }
+
+    @Override
+    public boolean canBreak() {
+        return true;
     }
 }

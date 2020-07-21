@@ -4,14 +4,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Unbreakable extends Wall{
-    int x, y;
-    BufferedImage wallImage;
-    int state = 2;
+    //int x, y;
+    //BufferedImage wallImage;
+    //int state = 2;
 
     public Unbreakable(int x, int y, BufferedImage wallImage) {
-        this.x = x;
-        this.y = y;
-        this.wallImage = wallImage;
+        super(x,y,wallImage);
     }
 
     @Override
@@ -22,5 +20,10 @@ public class Unbreakable extends Wall{
         }else if(state == 1){
 
         }
+    }
+
+    @Override
+    public boolean canBreak() {
+        return false;
     }
 }
