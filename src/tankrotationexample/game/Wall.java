@@ -3,20 +3,24 @@ package tankrotationexample.game;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class Wall {
-    int x, y;
-    BufferedImage wallImage;
+public abstract class Wall extends GameObject{
+   // int x, y;
+   // BufferedImage wallImage;
     int state = 2;
-    Rectangle hitBox;
+    //Rectangle hitBox;
     public Wall(int x, int y, BufferedImage wallImage){
-        this.x = x;
-        this.y = y;
-        this.wallImage = wallImage;
-        this.hitBox = new Rectangle(x,y,this.wallImage.getWidth(),this.wallImage.getHeight());
+        super(x,y,wallImage);
+       // this.x = x;
+       // this.y = y;
+       // this.wallImage = wallImage;
+       // this.hitBox = new Rectangle(x,y,this.wallImage.getWidth(),this.wallImage.getHeight());
     }
     public Rectangle getHitBox(){
         return hitBox.getBounds();
     }
-    public abstract void drawImage(Graphics g);
+    //public abstract void drawImage(Graphics g);
+    public void update(){
+
+    }
     public abstract boolean canBreak();
 }

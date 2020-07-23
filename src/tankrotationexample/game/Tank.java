@@ -123,7 +123,7 @@ public class Tank extends Moveable{
         this.collide = false;
     }
 
-    void update() {
+    public void update() {
         if(this.collide){
             doCollision();
         }else {
@@ -150,6 +150,7 @@ public class Tank extends Moveable{
  //       for(int i = 0 ; i < this.ammo.size(); i++){
  //           this.ammo.get(i).update();
  //           }
+        //if some ammo object intersects another object then remove that ammo from the list
     }
 
     private void rotateLeft() {
@@ -185,7 +186,6 @@ public class Tank extends Moveable{
         //this.hitBox.setLocation(x,y);
         setR();
         moveForward();
-
     }
     //void checkBorder was here
 
@@ -195,7 +195,7 @@ public class Tank extends Moveable{
     }
 
     @Override
-    void drawImage(Graphics g) {
+    public void drawImage(Graphics g) {
         AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
         rotation.rotate(Math.toRadians(angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
         Graphics2D g2d = (Graphics2D) g;

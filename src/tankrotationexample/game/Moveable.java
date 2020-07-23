@@ -5,28 +5,29 @@ import tankrotationexample.GameConstants;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class Moveable {
-    protected int x, y, vx, vy;
+public abstract class Moveable extends GameObject {
+    protected int vx, vy;
     protected float angle;
     protected int R;
-    Rectangle hitBox;
-    BufferedImage img;
+    //Rectangle hitBox;
+    //BufferedImage img;
 
     public Moveable(int x, int y, int vx, int vy, float angle, BufferedImage img) {
-        this.x = x;
-        this.y = y;
+        super(x, y, img);
+        //this.x = x;
+        //this.y = y;
         this.vx = vx;
         this.vy = vy;
         this.angle = angle;
-        this.img = img;
-        this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
+       // this.img = img;
+       // this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
 
     }
 
     abstract void moveForwards();
-    abstract void update();
+   // abstract void update();
     abstract void setR();
-    abstract void drawImage(Graphics g);
+  //  abstract void drawImage(Graphics g);
 
     public Rectangle getHitBox(){
         return hitBox.getBounds();

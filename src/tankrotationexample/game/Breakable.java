@@ -20,7 +20,7 @@ public class Breakable extends Wall{
     public void drawImage(Graphics g){
         if(state == 2){
             Graphics2D g2 = (Graphics2D) g;
-            g2.drawImage(this.wallImage,x, y, null);
+            g2.drawImage(this.img,x, y, null);
         }else if(state == 1){
 
         }
