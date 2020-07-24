@@ -14,13 +14,13 @@ public class Bullet extends Moveable {
     //Rectangle hitBox;
     Boolean show;
 
-    public Bullet(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id) {
+    public Bullet(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
         //this.x = x;
         //this.y = y;
         //this.angle = angle;
         //this.img = img;
         //this.hitBox = new Rectangle(x,y, this.img.getWidth(),this.img.getHeight());
-        super(x,y,vx,vy,angle,img,id);
+        super(x,y,vx,vy,angle,img,id, handler);
         this.show = true;
     }
 

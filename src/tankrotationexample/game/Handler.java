@@ -5,15 +5,32 @@ import java.util.ArrayList;
 
 public class Handler {
     ArrayList<GameObject> gameObjects = new ArrayList<>();
-    int x1,y1,x2,y2;
+    private int x1,y1,x2,y2;
 
 
     public void update(){
-        for(int i = 0; i<gameObjects.size();i++){
-            GameObject temp = gameObjects.get(i);
-            temp.update(); //updates all the gameObjects
+//        for(int i = 0; i<gameObjects.size();i++){
+//            GameObject temp = gameObjects.get(i);
+//            temp.update(); //updates all the gameObjects
+//
+//            if(temp.getId() == GameID.Tank1){
+//                x1 = temp.getX();
+//                y1 = temp.getY();
+//            }
+//            if(temp.getId() == GameID.Tank2){
+//                x2 = temp.getX();
+//                y2 = temp.getY();
+//            }
+//
+//        }
 
-            if(temp.getId() == GameID.Tank1){
+        //this.gameObjects.forEach(gameObject -> gameObject.update());
+
+        this.gameObjects.forEach(gameObject -> {
+            GameObject temp = gameObject;
+            temp.update();  //updates all the gameObjects
+
+            if(temp.getId() == GameID.Tank1){ //this is for the paintComponent moving tank screens
                 x1 = temp.getX();
                 y1 = temp.getY();
             }
@@ -21,9 +38,7 @@ public class Handler {
                 x2 = temp.getX();
                 y2 = temp.getY();
             }
-
-        }
-        //this.gameObjects.forEach(gameObject -> gameObject.update());
+        });
     }
 
     public void drawImage(Graphics g){
@@ -42,7 +57,7 @@ public class Handler {
         gameObjects.remove(temp);
     }
 
-    public int getTank1X(){
+    public int getTank1X(){ //this is for the moving screen
         return x1;
     }
     public int getTank1Y(){
@@ -68,6 +83,16 @@ public class Handler {
                 temp.setY(600);
             }
         }
+    }
+
+    public void collision(GameObject objectToCheck){
+        this.gameObjects.forEach(gameObject -> {
+            if(gameObject.getId() == GameID.Wall){
+                if(objectToCheck.getHitBox().intersects(gameObject.getHitBox())){
+
+                }
+            }
+        });
     }
 
 }

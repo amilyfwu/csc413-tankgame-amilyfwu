@@ -8,8 +8,8 @@ public class Breakable extends Wall{
     //BufferedImage wallImage;
     //int state = 2;
 
-    public Breakable(int x, int y, BufferedImage wallImage, GameID id) {
-        super(x,y,wallImage ,id);
+    public Breakable(int x, int y, BufferedImage wallImage, GameID id, Handler handler) {
+        super(x,y,wallImage ,id, handler);
     }
 
     //if bullet hits it remove the wall from the list otherwise act as a wall

@@ -149,13 +149,13 @@ public class TRE extends JPanel implements Runnable {
                 for(int curCol = 0; curCol < numCols; curCol++ ){
                     switch (mapInfo[curCol]){
                         case "2":
-                            Breakable br = new Breakable(curCol*32, curRow*32, breakableWall,GameID.Wall);
+                            Breakable br = new Breakable(curCol*32, curRow*32, breakableWall,GameID.Wall, this.handler);
                             //this.walls.add(br);
                             this.handler.addGameObject(br);
                             break;
                         case "3":
                         case "9":
-                            Unbreakable unBr = new Unbreakable(curCol*32, curRow*32, unBreakableWall,GameID.Wall);
+                            Unbreakable unBr = new Unbreakable(curCol*32, curRow*32, unBreakableWall,GameID.Wall,this.handler);
                             //this.walls.add(unBr);
                             this.handler.addGameObject(unBr);
                             break;
@@ -171,8 +171,8 @@ public class TRE extends JPanel implements Runnable {
 
         //tanks were created here
         ////moved tanks here
-        Tank t1 = new Tank(200, 200, 0, 0, 0, t1img, GameID.Tank1);
-        Tank t2 = new Tank(600, 600, 0, 0, 180, t2img, GameID.Tank2); //should be a different image
+        Tank t1 = new Tank(200, 200, 0, 0, 0, t1img, GameID.Tank1, this.handler);
+        Tank t2 = new Tank(600, 600, 0, 0, 180, t2img, GameID.Tank2, this.handler); //should be a different image
         TankControl tc1 = new TankControl(t1, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
         TankControl tc2 = new TankControl(t2, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
 

@@ -10,8 +10,9 @@ public abstract class GameObject {
     Rectangle hitBox;
     BufferedImage img;
     protected GameID id;
+    protected Handler handler;
 
-    public GameObject(int x, int y, BufferedImage img,GameID id) {
+    public GameObject(int x, int y, BufferedImage img,GameID id,Handler handler) {
         this.x = x;
         this.y = y;
         //this.vx = vx;
@@ -20,7 +21,16 @@ public abstract class GameObject {
         this.img = img;
         this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
         this.id = id;
+        this.handler = handler;
 
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public void setHandler(Handler handler) {
+        this.handler = handler;
     }
 
     public GameID getId() {

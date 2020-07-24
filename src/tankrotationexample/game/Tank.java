@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 /**
  *
@@ -33,8 +34,8 @@ public class Tank extends Moveable{
     private boolean collide;
 
 
-    Tank(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id) {
-        super(x,y,vx,vy,angle,img,id);
+    Tank(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
+        super(x,y,vx,vy,angle,img,id,handler);
         //this.x = x;
         //this.y = y;
         //this.vx = vx;
@@ -43,7 +44,6 @@ public class Tank extends Moveable{
         //this.angle = angle;
         //this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
         this.ammo = new ArrayList<>();
-
     }
 
     //void setX(int x){ this.x = x; }
@@ -120,12 +120,37 @@ public class Tank extends Moveable{
     }
 
     void doCollision2(){
+        this.handler.gameObjects.forEach(gameObject -> {
+            GameID gameIDTemp = gameObject.getId();
+            if(gameIDTemp == GameID.Wall){
+                if(this.getHitBox().intersects(gameObject.getHitBox())){
+                    setCollision(true);
+                }
+            }
+            if((gameIDTemp == GameID.Tank1 && this.getId()!= GameID.Tank1) || (gameIDTemp == GameID.Tank2 && this.getId() != GameID.Tank2)){
+                if(this.getHitBox().intersects(gameObject.getHitBox())){
+                    setCollision(true);
+                }
+            }
+            if(gameIDTemp != this.getId()){ //exclude the tank shooting the bullet
+                try{
+                    this.ammo.forEach(bullet -> {
+                        if(bullet.getHitBox().intersects(gameObject.getHitBox())){
+                            this.ammo.remove(bullet);
+                        }
+                    });
+                }catch (ConcurrentModificationException ex){
 
+                }
+            }
 
+        });
 
     }
 
     public void update() {
+
+        doCollision2();
         if(this.collide){
             doCollision();
         }else {
@@ -137,6 +162,12 @@ public class Tank extends Moveable{
             }
         }
 
+//        if (this.UpPressed && !(this.LeftPressed || this.RightPressed)) {
+//            this.moveForwards();
+//        }
+//        if (this.DownPressed && !(this.LeftPressed || this.RightPressed)) {
+//            this.moveBackwards();
+//        }
         if (this.LeftPressed) {
             this.rotateLeft();
         }
@@ -145,8 +176,9 @@ public class Tank extends Moveable{
         }
 
         if(this.ShootPressed && TRE.tick % 20 == 0){
-            Bullet b = new Bullet(x,y,vx,vy,angle, TRE.bulletImage,GameID.Bullet);
+            Bullet b = new Bullet(x,y,vx,vy,angle, TRE.bulletImage,GameID.Bullet, this.handler);
             this.ammo.add(b);
+            //this.handler.addGameObject(b);
         }
         this.ammo.forEach(bullet -> bullet.update());
  //       for(int i = 0 ; i < this.ammo.size(); i++){
