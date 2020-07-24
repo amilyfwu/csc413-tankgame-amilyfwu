@@ -8,8 +8,8 @@ public class Unbreakable extends Wall{
     //BufferedImage wallImage;
     int state = 2;
 
-    public Unbreakable(int x, int y, BufferedImage wallImage) {
-        super(x,y,wallImage);
+    public Unbreakable(int x, int y, BufferedImage wallImage,GameID id) {
+        super(x,y,wallImage,id);
     }
 
     @Override

@@ -12,8 +12,8 @@ public abstract class Moveable extends GameObject {
     //Rectangle hitBox;
     //BufferedImage img;
 
-    public Moveable(int x, int y, int vx, int vy, float angle, BufferedImage img) {
-        super(x, y, img);
+    public Moveable(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id) {
+        super(x, y, img,id);
         //this.x = x;
         //this.y = y;
         this.vx = vx;

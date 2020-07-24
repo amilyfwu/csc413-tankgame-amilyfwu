@@ -33,8 +33,8 @@ public class Tank extends Moveable{
     private boolean collide;
 
 
-    Tank(int x, int y, int vx, int vy, float angle, BufferedImage img) {
-        super(x,y,vx,vy,angle,img);
+    Tank(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id) {
+        super(x,y,vx,vy,angle,img,id);
         //this.x = x;
         //this.y = y;
         //this.vx = vx;
@@ -46,21 +46,17 @@ public class Tank extends Moveable{
 
     }
 
-    void setX(int x){ this.x = x; }
+    //void setX(int x){ this.x = x; }
 
-    void setY(int y) { this. y = y;}
+   // void setY(int y) { this. y = y;}
 
     void setCollision(boolean collide){
         this.collide = collide;
     }
 
-    int getX(){
-        return x;
-    }
+    //int getX(){ return x; }
 
-    int getY(){
-        return y;
-    }
+    //int getY(){ return y; }
 
     public boolean isUpPressed(){
         return UpPressed;
@@ -123,6 +119,12 @@ public class Tank extends Moveable{
         this.collide = false;
     }
 
+    void doCollision2(){
+
+
+
+    }
+
     public void update() {
         if(this.collide){
             doCollision();
@@ -143,7 +145,7 @@ public class Tank extends Moveable{
         }
 
         if(this.ShootPressed && TRE.tick % 20 == 0){
-            Bullet b = new Bullet(x,y,vx,vy,angle, TRE.bulletImage);
+            Bullet b = new Bullet(x,y,vx,vy,angle, TRE.bulletImage,GameID.Bullet);
             this.ammo.add(b);
         }
         this.ammo.forEach(bullet -> bullet.update());

@@ -8,8 +8,8 @@ public abstract class Wall extends GameObject{
    // BufferedImage wallImage;
     int state = 2;
     //Rectangle hitBox;
-    public Wall(int x, int y, BufferedImage wallImage){
-        super(x,y,wallImage);
+    public Wall(int x, int y, BufferedImage wallImage,GameID id){
+        super(x,y,wallImage,id);
        // this.x = x;
        // this.y = y;
        // this.wallImage = wallImage;

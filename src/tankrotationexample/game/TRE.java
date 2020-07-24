@@ -29,12 +29,14 @@ import static javax.imageio.ImageIO.read;
 public class TRE extends JPanel implements Runnable {
 
     private BufferedImage world; //the black screen
-    private Tank t1;
-    private Tank t2; //added
+    //private Tank t1;
+    //private Tank t2; //added
     private Launcher lf;
     static long tick = 0; //this was private long static previously
     public static BufferedImage bulletImage;
-    ArrayList<Wall> walls;
+    //ArrayList<Wall> walls;
+
+    private Handler handler;
 
     public TRE(Launcher lf){
         this.lf = lf;
@@ -46,32 +48,31 @@ public class TRE extends JPanel implements Runnable {
            this.resetGame();
            while (true) {
                this.tick++;
-               this.t1.update(); // update tank
-               this.t2.update(); // update tank
+               handler.update(); //update all gameObjects
+               //this.t1.update(); // update tank
+               //this.t2.update(); // update tank
                this.repaint();   // redraw game
 
-               if(this.t1.getHitBox().intersects(this.t2.getHitBox())){ //check for tank collisions
-                   System.out.println("tanks are colliding");
-                   this.t1.setCollision(true);
-                   this.t2.setCollision(true);
-               }
-               for(int i = 0; i<this.walls.size() ;i++){
-                   Rectangle wallHitBox = this.walls.get(i).getHitBox();
-
-                   //check bullet collision for wall or tank
-
-                   //check for wall and tank collision
-                   if(wallHitBox.intersects(this.t1.getHitBox())){
-                       this.t1.setCollision(true);
-                       break;
-                   }
-                   if(wallHitBox.intersects(this.t2.getHitBox())){
-                       this.t2.setCollision(true);
-                       break;
-                   }
-                   //if()
-                   //somehow send the hitbox value of the wall or tank to the tank class for the ammo array list
-               }
+//               if(this.t1.getHitBox().intersects(this.t2.getHitBox())){ //check for tank collisions
+//                   System.out.println("tanks are colliding");
+//                   this.t1.setCollision(true);
+//                   this.t2.setCollision(true);
+//               }
+//               for(int i = 0; i<this.walls.size() ;i++){
+//                   Rectangle wallHitBox = this.walls.get(i).getHitBox();
+//
+//                   //check bullet collision for wall or tank
+//
+//                   //check for wall and tank collision
+//                   if(wallHitBox.intersects(this.t1.getHitBox())){
+//                       this.t1.setCollision(true);
+//                       break;
+//                   }
+//                   if(wallHitBox.intersects(this.t2.getHitBox())){
+//                       this.t2.setCollision(true);
+//                       break;
+//                   }
+//               }
 
                 Thread.sleep(1000 / 144); //sleep for a few milliseconds
                 //System.out.println(t1);
@@ -95,10 +96,11 @@ public class TRE extends JPanel implements Runnable {
      */
     public void resetGame(){
         this.tick = 0;
-        this.t1.setX(200);
-        this.t1.setY(200);
-        this.t2.setX(600);
-        this.t2.setY(600);
+        this.handler.resetTanks();
+        //this.t1.setX(200);
+        //this.t1.setY(200);
+        //this.t2.setX(600);
+        //this.t2.setY(600);
     }
 
 
@@ -115,7 +117,9 @@ public class TRE extends JPanel implements Runnable {
         BufferedImage t2img = null;
         BufferedImage breakableWall = null;
         BufferedImage unBreakableWall = null;
-        walls = new ArrayList<>();
+       // walls = new ArrayList<>();
+        handler = new Handler();
+
         try {
             /*
              * note class loaders read files from the out folder (build folder in Netbeans) and not the
@@ -145,13 +149,15 @@ public class TRE extends JPanel implements Runnable {
                 for(int curCol = 0; curCol < numCols; curCol++ ){
                     switch (mapInfo[curCol]){
                         case "2":
-                            Breakable br = new Breakable(curCol*32, curRow*32, breakableWall);
-                            this.walls.add(br);
+                            Breakable br = new Breakable(curCol*32, curRow*32, breakableWall,GameID.Wall);
+                            //this.walls.add(br);
+                            this.handler.addGameObject(br);
                             break;
                         case "3":
                         case "9":
-                            Unbreakable unBr = new Unbreakable(curCol*32, curRow*32, unBreakableWall);
-                            this.walls.add(unBr);
+                            Unbreakable unBr = new Unbreakable(curCol*32, curRow*32, unBreakableWall,GameID.Wall);
+                            //this.walls.add(unBr);
+                            this.handler.addGameObject(unBr);
                             break;
 
                     }
@@ -163,10 +169,15 @@ public class TRE extends JPanel implements Runnable {
             ex.printStackTrace();
         }
 
-        t1 = new Tank(200, 200, 0, 0, 0, t1img);
-        t2 = new Tank(600, 600, 0, 0, 180, t2img); //should be a different image
+        //tanks were created here
+        ////moved tanks here
+        Tank t1 = new Tank(200, 200, 0, 0, 0, t1img, GameID.Tank1);
+        Tank t2 = new Tank(600, 600, 0, 0, 180, t2img, GameID.Tank2); //should be a different image
         TankControl tc1 = new TankControl(t1, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
         TankControl tc2 = new TankControl(t2, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
+
+        this.handler.addGameObject(t1);
+        this.handler.addGameObject(t2);
 
         this.setBackground(Color.BLACK);
         this.lf.getJf().addKeyListener(tc1);
@@ -210,11 +221,12 @@ public class TRE extends JPanel implements Runnable {
         Graphics2D buffer = world.createGraphics();
         buffer.setColor(Color.BLACK);
         buffer.fillRect(0,0,GameConstants.WORLD_WIDTH,GameConstants.WORLD_HEIGHT);
-        this.walls.forEach(wall -> wall.drawImage(buffer));
-        this.t1.drawImage(buffer);
-        this.t2.drawImage(buffer);
-        BufferedImage leftHalf = world.getSubimage(checkBorderScreenX(t1.getX() - GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(t1.getY() - GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
-        BufferedImage rightHalf = world.getSubimage(checkBorderScreenX(t2.getX()-GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(t2.getY()-GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
+        //this.walls.forEach(wall -> wall.drawImage(buffer));
+        //this.t1.drawImage(buffer);
+        //this.t2.drawImage(buffer);
+        this.handler.drawImage(buffer); // draw all gameObjects
+        BufferedImage leftHalf = world.getSubimage(checkBorderScreenX(this.handler.getTank1X() - GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(this.handler.getTank1Y() - GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
+        BufferedImage rightHalf = world.getSubimage(checkBorderScreenX(this.handler.getTank2X() - GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(this.handler.getTank2Y()-GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
         BufferedImage miniMap = world.getSubimage(0,0,GameConstants.WORLD_WIDTH,GameConstants.WORLD_HEIGHT);
         g2.drawImage(leftHalf,0,0,null);
         g2.drawImage(rightHalf,GameConstants.GAME_SCREEN_WIDTH/2 + 6,0,null);
