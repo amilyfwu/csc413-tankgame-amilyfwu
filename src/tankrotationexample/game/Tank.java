@@ -120,31 +120,42 @@ public class Tank extends Moveable{
     }
 
     void doCollision2(){
-        this.handler.gameObjects.forEach(gameObject -> {
-            GameID gameIDTemp = gameObject.getId();
-            if(gameIDTemp == GameID.Wall){
-                if(this.getHitBox().intersects(gameObject.getHitBox())){
-                    setCollision(true);
+        try {
+            this.handler.gameObjects.forEach(gameObject -> {
+                GameID gameIDTemp = gameObject.getId();
+                if (gameIDTemp == GameID.Wall) {
+                    if (this.getHitBox().intersects(gameObject.getHitBox())) {
+                        setCollision(true);
+                    }
                 }
-            }
-            if((gameIDTemp == GameID.Tank1 && this.getId()!= GameID.Tank1) || (gameIDTemp == GameID.Tank2 && this.getId() != GameID.Tank2)){
-                if(this.getHitBox().intersects(gameObject.getHitBox())){
-                    setCollision(true);
+                if ((gameIDTemp == GameID.Tank1 && this.getId() != GameID.Tank1) || (gameIDTemp == GameID.Tank2 && this.getId() != GameID.Tank2)) {
+                    if (this.getHitBox().intersects(gameObject.getHitBox())) {
+                        setCollision(true);
+                    }
                 }
-            }
-            if(gameIDTemp != this.getId()){ //exclude the tank shooting the bullet
-                try{
-                    this.ammo.forEach(bullet -> {
-                        if(bullet.getHitBox().intersects(gameObject.getHitBox())){
-                            this.ammo.remove(bullet);
-                        }
-                    });
-                }catch (ConcurrentModificationException ex){
+                if (gameIDTemp != this.getId()) { //exclude the tank shooting the bullet
+                    try {
+                        this.ammo.forEach(bullet -> { //checking bullet Collision
+                            if (bullet.getHitBox().intersects(gameObject.getHitBox())) {
+                                this.ammo.remove(bullet);
+                                if (gameIDTemp == GameID.Tank1) {
 
-                }
-            }
+                                } else if (gameIDTemp == GameID.Tank2) {
 
-        });
+                                } else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) {
+                                    this.handler.removeGameObject(gameObject);
+                                }
+                            }
+                        });
+                    } catch (ConcurrentModificationException ex) {
+                        System.out.println("problem deleting ammo");
+                    }
+                }
+
+            });
+        }catch (ConcurrentModificationException ex){
+            System.out.println("Problem deleting gameobjects");
+        }
 
     }
 

@@ -2,6 +2,7 @@ package tankrotationexample.game;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 public class Handler {
     ArrayList<GameObject> gameObjects = new ArrayList<>();
@@ -25,20 +26,21 @@ public class Handler {
 //        }
 
         //this.gameObjects.forEach(gameObject -> gameObject.update());
+        try {
+            this.gameObjects.forEach(gameObject -> {
+                GameObject temp = gameObject;
+                temp.update();  //updates all the gameObjects
 
-        this.gameObjects.forEach(gameObject -> {
-            GameObject temp = gameObject;
-            temp.update();  //updates all the gameObjects
-
-            if(temp.getId() == GameID.Tank1){ //this is for the paintComponent moving tank screens
-                x1 = temp.getX();
-                y1 = temp.getY();
-            }
-            if(temp.getId() == GameID.Tank2){
-                x2 = temp.getX();
-                y2 = temp.getY();
-            }
-        });
+                if (temp.getId() == GameID.Tank1) { //this is for the paintComponent moving tank screens
+                    x1 = temp.getX();
+                    y1 = temp.getY();
+                }
+                if (temp.getId() == GameID.Tank2) {
+                    x2 = temp.getX();
+                    y2 = temp.getY();
+                }
+            });
+        }catch (ConcurrentModificationException ex){}
     }
 
     public void drawImage(Graphics g){
@@ -46,7 +48,10 @@ public class Handler {
 //            GameObject temp = gameObjects.get(i);
 //            temp.drawImage(g);
 //        }
-        this.gameObjects.forEach(gameObject -> gameObject.drawImage(g));
+        try {
+            this.gameObjects.forEach(gameObject -> gameObject.drawImage(g));
+        }catch (ConcurrentModificationException ex){}
+
     }
 
     public void addGameObject(GameObject temp){
