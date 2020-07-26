@@ -117,6 +117,9 @@ public class TRE extends JPanel implements Runnable {
         BufferedImage t2img = null;
         BufferedImage breakableWall = null;
         BufferedImage unBreakableWall = null;
+        BufferedImage powerUpSpd = null;
+        BufferedImage powerUpHp = null;
+        BufferedImage powerUp2xDmg = null;
        // walls = new ArrayList<>();
         handler = new Handler();
 
@@ -130,6 +133,8 @@ public class TRE extends JPanel implements Runnable {
             TRE.bulletImage = read(TRE.class.getClassLoader().getResource("bullet1.png"));
             breakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile4.png")));
             unBreakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile2.png")));
+            powerUpSpd = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile6.png")));
+            powerUpHp = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile5.png")));
 
 
             InputStreamReader isr = new InputStreamReader(TRE.class.getClassLoader().getResourceAsStream("maps/map2.txt"));
@@ -159,6 +164,13 @@ public class TRE extends JPanel implements Runnable {
                             //this.walls.add(unBr);
                             this.handler.addGameObject(unBr);
                             break;
+                        case "4":
+                            PowerUpSpd spd = new PowerUpSpd(curCol*32, curRow*32, powerUpSpd, GameID.PowerUp, this.handler);
+                            this.handler.addGameObject(spd);
+                            break;
+                        case "5":
+                            PowerUpHp hp = new PowerUpHp(curCol*32, curRow*32, powerUpHp, GameID.PowerUp, this.handler);
+                            this.handler.addGameObject(hp);
 
                     }
                 }

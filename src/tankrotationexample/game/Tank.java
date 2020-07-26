@@ -105,7 +105,7 @@ public class Tank extends Moveable{
         this.ShootPressed = false;
     }
 
-    void doCollision(){
+    private void doCollision(){
         if(this.UpPressed){
             for(int i = 0; i<=10; i++){
                 this.moveBackwards();
@@ -119,43 +119,53 @@ public class Tank extends Moveable{
         this.collide = false;
     }
 
-    void doCollision2(){
+    private void doCollision2(){
         try {
             this.handler.gameObjects.forEach(gameObject -> {
                 GameID gameIDTemp = gameObject.getId();
-                if (gameIDTemp == GameID.Wall) {
-                    if (this.getHitBox().intersects(gameObject.getHitBox())) {
+                //tank colliding will walls
+                if (gameIDTemp == GameID.Wall && gameObject instanceof Wall) {
+                    if (this.getHitBox().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)) {
                         setCollision(true);
                     }
                 }
+                //tank colliding with tank
                 if ((gameIDTemp == GameID.Tank1 && this.getId() != GameID.Tank1) || (gameIDTemp == GameID.Tank2 && this.getId() != GameID.Tank2)) {
                     if (this.getHitBox().intersects(gameObject.getHitBox())) {
                         setCollision(true);
                     }
                 }
-                if (gameIDTemp != this.getId()) { //exclude the tank shooting the bullet
+                //tank colliding with PowerUps
+
+
+                //bullets colliding with everything
+                //exclude the tank shooting the bullet
+                if (gameIDTemp != this.getId()) {
                     try {
-                        this.ammo.forEach(bullet -> { //checking bullet Collision
+                        //checking bullet Collision
+                        this.ammo.forEach(bullet -> {
+                            //bullet hitting gameObjects and removing that bullet
                             if (bullet.getHitBox().intersects(gameObject.getHitBox())) {
-                                this.ammo.remove(bullet);
+                                if((gameIDTemp == GameID.Wall && gameObject instanceof Breakable && ((Breakable) gameObject).getState() == 1) || gameIDTemp == GameID.PowerUp ){
+                                }else{
+                                    this.ammo.remove(bullet);
+                                }
+
                                 if (gameIDTemp == GameID.Tank1) {
+                                    //health bar and lives left
 
                                 } else if (gameIDTemp == GameID.Tank2) {
+                                    //health bar and lives left
 
                                 } else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) {
-                                    this.handler.removeGameObject(gameObject);
+                                    ((Breakable) gameObject).setState(1);
                                 }
                             }
                         });
-                    } catch (ConcurrentModificationException ex) {
-                        System.out.println("problem deleting ammo");
-                    }
+                    } catch (ConcurrentModificationException ex) {}
                 }
-
             });
-        }catch (ConcurrentModificationException ex){
-            System.out.println("Problem deleting gameobjects");
-        }
+        }catch (ConcurrentModificationException ex){}
 
     }
 
