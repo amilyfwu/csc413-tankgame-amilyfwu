@@ -34,15 +34,17 @@ public class Handler {
                 GameObject temp = gameObject;
                 temp.update();  //updates all the gameObjects
 
-                if (temp.getId() == GameID.Tank1) { //this is for the paintComponent moving tank screens
+                if (temp.getId() == GameID.Tank1) { //this is for the paintComponent
                     x1 = temp.getX();
                     y1 = temp.getY();
                     hp1 = ((Tank)temp).getHp();
+                    live1 = ((Tank)temp).getLives();
                 }
                 if (temp.getId() == GameID.Tank2) {
                     x2 = temp.getX();
                     y2 = temp.getY();
                     hp2 = ((Tank)temp).getHp();
+                    live2 = ((Tank)temp).getLives();
 
                 }
             });
@@ -93,17 +95,26 @@ public class Handler {
         return live2;
     }
 
-    public void resetTanks(){
+    public void resetObjects(){
         for (int i = 0; i<gameObjects.size();i++){
             GameObject temp = gameObjects.get(i);
             if(temp.getId() == GameID.Tank1){
                temp.setX(200);
                temp.setY(200);
+                ((Tank)temp).setHp(100);
+                ((Tank)temp).setLives(3);
+                ((Tank)temp).changeR(2);
 
             }
             if(temp.getId() == GameID.Tank2){
                 temp.setX(600);
                 temp.setY(600);
+                ((Tank)temp).setHp(100);
+                ((Tank)temp).setLives(3);
+                ((Tank)temp).changeR(2);
+            }
+            if(temp.getId() == GameID.Wall || temp.getId() == GameID.PowerUp){
+                ((Stationary)temp).setState(2);
             }
         }
     }

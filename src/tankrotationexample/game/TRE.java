@@ -62,10 +62,14 @@ public class TRE extends JPanel implements Runnable {
                  * we will do this with by ending the game when drawn 2000 frames have been drawn
                  */
                  //this is is what is causing the game to end
- //               if(this.tick > 2000){
- //                   this.lf.setFrame("end");
- //                   return;
- //               }
+//                if(this.tick > 2000){
+//                    this.lf.setFrame("end");
+//                    return;
+//                }
+               if(this.handler.getLive1() == 0 || this.handler.getLive2() == 0){
+                   this.lf.setFrame("end");
+                   return;
+               }
             }
        } catch (InterruptedException ignored) {
            System.out.println(ignored);
@@ -77,7 +81,7 @@ public class TRE extends JPanel implements Runnable {
      */
     public void resetGame(){
         this.tick = 0;
-        this.handler.resetTanks();
+        this.handler.resetObjects();
         //this.t1.setX(200);
         //this.t1.setY(200);
         //this.t2.setX(600);
@@ -228,16 +232,22 @@ public class TRE extends JPanel implements Runnable {
         g.setColor(Color.GRAY);
         g.fillRect(120, 650, 200,20);
         g.setColor(Color.GREEN);
-        g.fillRect(120,650,this.handler.getHp1()*2,20);
+        g.fillRect(120,650,this.handler.getHp1() * 2,20);
         g.setColor(Color.ORANGE);
         g.drawRect(120, 650, 200,20);
 
+        g.setColor(Color.WHITE);
+        g.drawString("Live Count: " + this.handler.getLive1(),120, 700);
+
         g.setColor(Color.GRAY);
-        g.fillRect(620, 650, 200,32);
+        g.fillRect(620, 650, 200,20);
         g.setColor(Color.GREEN);
-        g.fillRect(620,650,this.handler.getHp2()*2,20);
+        g.fillRect(620,650,this.handler.getHp2() * 2,20);
         g.setColor(Color.ORANGE);
         g.drawRect(620, 650, 200,20);
+
+        g.setColor(Color.WHITE);
+        g.drawString("Live Count: " + this.handler.getLive2(),620, 700);
 
         g2.scale(.10,.10);
         g2.drawImage(miniMap,4000,4000,null);

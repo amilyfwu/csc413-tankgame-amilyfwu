@@ -24,11 +24,12 @@ public class Tank extends Moveable{
     //
     //private Rectangle hitBox;
     private ArrayList<Bullet> ammo;
-    private int hp = 100;
-    private int lives = 3;
-    private int tempR = 2;
-    private int tempAttackPts = 10;
 
+    //Tank stats
+    private int hp = 100;
+    private int lives = 3; //live 3 times
+    private int tempR = 2; //Temporary speed
+    private int tempAttackPts = 10; //Temporary atk pts to pass into bullet class
 
 
     //private BufferedImage img;
@@ -64,6 +65,14 @@ public class Tank extends Moveable{
         this.hp = hp;
     }
 
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
     public int getTempAttackPts() {
         return tempAttackPts;
     }
@@ -75,9 +84,9 @@ public class Tank extends Moveable{
     void setR(){
         R = tempR;
     }
-    void changeR(int changeR){
+    public void changeR(int changeR){ //modifying the speed for powerup
         tempR = changeR;
-        System.out.println(tempR);
+        //System.out.println(tempR);
     }
 
     void toggleUpPressed() {
@@ -164,7 +173,7 @@ public class Tank extends Moveable{
                             tempR++;
                             changeR(tempR);
                             ((PowerUpSpd) gameObject).setState(1);
-                            System.out.println("im speed " + tempR);
+                            //System.out.println("im speed " + tempR);
                         }
                         else if (gameObject instanceof PowerUp2xDmg){
                             setTempAttackPts(getTempAttackPts()*2);
@@ -192,6 +201,10 @@ public class Tank extends Moveable{
                                     //lives left check
                                     //if hp is less than or equal to zero
                                     // the live count reduces by one and the hp is reset to 100 again
+                                    if(((Tank)gameObject).getHp()<=0){
+                                        ((Tank)gameObject).setLives(((Tank)gameObject).getLives() - 1);
+                                        ((Tank)gameObject).setHp(100);
+                                    }
                                 }
                                 else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) {
                                     ((Breakable) gameObject).setState(1);
