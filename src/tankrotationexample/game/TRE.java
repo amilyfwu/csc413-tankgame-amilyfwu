@@ -223,8 +223,24 @@ public class TRE extends JPanel implements Runnable {
         BufferedImage miniMap = world.getSubimage(0,0,GameConstants.WORLD_WIDTH,GameConstants.WORLD_HEIGHT);
         g2.drawImage(leftHalf,0,0,null);
         g2.drawImage(rightHalf,GameConstants.GAME_SCREEN_WIDTH/2 + 6,0,null);
+
+        //hp bar
+        g.setColor(Color.GRAY);
+        g.fillRect(120, 650, 200,20);
+        g.setColor(Color.GREEN);
+        g.fillRect(120,650,this.handler.getHp1()*2,20);
+        g.setColor(Color.ORANGE);
+        g.drawRect(120, 650, 200,20);
+
+        g.setColor(Color.GRAY);
+        g.fillRect(620, 650, 200,32);
+        g.setColor(Color.GREEN);
+        g.fillRect(620,650,this.handler.getHp2()*2,20);
+        g.setColor(Color.ORANGE);
+        g.drawRect(620, 650, 200,20);
+
         g2.scale(.10,.10);
-        g2.drawImage(miniMap,3000,3000,null);
+        g2.drawImage(miniMap,4000,4000,null);
 
     }
 

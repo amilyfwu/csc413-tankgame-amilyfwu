@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 public class Handler {
-    ArrayList<GameObject> gameObjects = new ArrayList<>();
+    private ArrayList<GameObject> gameObjects = new ArrayList<>();
     private int x1,y1,x2,y2, hp1,hp2,live1,live2;
 
+    public ArrayList<GameObject> getGameObjects() {
+        return gameObjects;
+    }
 
     public void update(){
 //        for(int i = 0; i<gameObjects.size();i++){

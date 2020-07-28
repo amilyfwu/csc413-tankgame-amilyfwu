@@ -136,7 +136,7 @@ public class Tank extends Moveable{
 
     private void doCollision2(){
         try {
-            this.handler.gameObjects.forEach(gameObject -> {
+            this.handler.getGameObjects().forEach(gameObject -> {
                 GameID gameIDTemp = gameObject.getId();
                 //tank colliding will walls
                 if (gameIDTemp == GameID.Wall && gameObject instanceof Wall) {
@@ -182,16 +182,21 @@ public class Tank extends Moveable{
                             //bullet hitting gameObjects and removing that bullet
                             if (bullet.getHitBox().intersects(gameObject.getHitBox())) {
                                 if((gameIDTemp == GameID.Wall && gameObject instanceof Breakable && ((Breakable) gameObject).getState() == 1) || gameIDTemp == GameID.PowerUp ){
-                                }else{
+                                }
+                                else{
                                     this.ammo.remove(bullet);
                                 }
                                 if (gameIDTemp == GameID.Tank1 || gameIDTemp == GameID.Tank2) {
                                     //health bar
                                     ((Tank)gameObject).setHp(((Tank)gameObject).getHp() - bullet.getAttackPts());
                                     //lives left check
-
-                                }  else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) {
+                                    //if hp is less than or equal to zero
+                                    // the live count reduces by one and the hp is reset to 100 again
+                                }
+                                else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) {
                                     ((Breakable) gameObject).setState(1);
+                                    //if getState is more than zero reduce the state by 1;
+                                    //if getState is zero dont do anything
                                 }
                             }
                         });
