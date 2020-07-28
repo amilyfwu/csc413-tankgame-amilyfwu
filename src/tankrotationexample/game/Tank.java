@@ -24,6 +24,12 @@ public class Tank extends Moveable{
     //
     //private Rectangle hitBox;
     private ArrayList<Bullet> ammo;
+    private int hp = 100;
+    private int lives = 3;
+    private int tempR = 2;
+    private int tempAttackPts = 10;
+
+
 
     //private BufferedImage img;
     private boolean UpPressed;
@@ -46,23 +52,32 @@ public class Tank extends Moveable{
         this.ammo = new ArrayList<>();
     }
 
-    //void setX(int x){ this.x = x; }
-
-   // void setY(int y) { this. y = y;}
-
     void setCollision(boolean collide){
         this.collide = collide;
     }
 
-    //int getX(){ return x; }
-
-    //int getY(){ return y; }
-
-    public boolean isUpPressed(){
-        return UpPressed;
+    public int getHp() {
+        return hp;
     }
-    public boolean isDownPressed(){
-        return DownPressed;
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public int getTempAttackPts() {
+        return tempAttackPts;
+    }
+
+    public void setTempAttackPts(int tempAttackPts) {
+        this.tempAttackPts = tempAttackPts;
+    }
+
+    void setR(){
+        R = tempR;
+    }
+    void changeR(int changeR){
+        tempR = changeR;
+        System.out.println(tempR);
     }
 
     void toggleUpPressed() {
@@ -107,12 +122,12 @@ public class Tank extends Moveable{
 
     private void doCollision(){
         if(this.UpPressed){
-            for(int i = 0; i<=10; i++){
+            for(int i = 0; i<=5; i++){
                 this.moveBackwards();
             }
         }
         if (this.DownPressed){
-            for(int i = 0; i<=10; i++){
+            for(int i = 0; i<=5; i++){
                 this.moveForwards();
             }
         }
@@ -130,16 +145,36 @@ public class Tank extends Moveable{
                     }
                 }
                 //tank colliding with tank
-                if ((gameIDTemp == GameID.Tank1 && this.getId() != GameID.Tank1) || (gameIDTemp == GameID.Tank2 && this.getId() != GameID.Tank2)) {
+                else if ((gameIDTemp == GameID.Tank1 && this.getId() != GameID.Tank1) || (gameIDTemp == GameID.Tank2 && this.getId() != GameID.Tank2)) {
                     if (this.getHitBox().intersects(gameObject.getHitBox())) {
                         setCollision(true);
                     }
                 }
                 //tank colliding with PowerUps
-
+                else if(gameIDTemp == GameID.PowerUp && ((Stationary) gameObject).getState() == 2){
+                    if(this.getHitBox().intersects(gameObject.getHitBox())){
+                        //powerup : hp, speed, and 2x damage
+                        if(gameObject instanceof PowerUpHp){
+                            if(hp < 100){
+                                setHp(getHp() + 10);
+                            }
+                            ((PowerUpHp) gameObject).setState(1);
+                        }
+                        else if (gameObject instanceof PowerUpSpd){ //works
+                            tempR++;
+                            changeR(tempR);
+                            ((PowerUpSpd) gameObject).setState(1);
+                            System.out.println("im speed " + tempR);
+                        }
+                        else if (gameObject instanceof PowerUp2xDmg){
+                            setTempAttackPts(getTempAttackPts()*2);
+                            ((PowerUp2xDmg) gameObject).setState(1);
+                        }
+                    }
+                }
 
                 //bullets colliding with everything
-                //exclude the tank shooting the bullet
+                //exclude the tank that is shooting the bullet
                 if (gameIDTemp != this.getId()) {
                     try {
                         //checking bullet Collision
@@ -150,14 +185,12 @@ public class Tank extends Moveable{
                                 }else{
                                     this.ammo.remove(bullet);
                                 }
+                                if (gameIDTemp == GameID.Tank1 || gameIDTemp == GameID.Tank2) {
+                                    //health bar
+                                    ((Tank)gameObject).setHp(((Tank)gameObject).getHp() - bullet.getAttackPts());
+                                    //lives left check
 
-                                if (gameIDTemp == GameID.Tank1) {
-                                    //health bar and lives left
-
-                                } else if (gameIDTemp == GameID.Tank2) {
-                                    //health bar and lives left
-
-                                } else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) {
+                                }  else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) {
                                     ((Breakable) gameObject).setState(1);
                                 }
                             }
@@ -170,7 +203,6 @@ public class Tank extends Moveable{
     }
 
     public void update() {
-
         doCollision2();
         if(this.collide){
             doCollision();
@@ -183,12 +215,6 @@ public class Tank extends Moveable{
             }
         }
 
-//        if (this.UpPressed && !(this.LeftPressed || this.RightPressed)) {
-//            this.moveForwards();
-//        }
-//        if (this.DownPressed && !(this.LeftPressed || this.RightPressed)) {
-//            this.moveBackwards();
-//        }
         if (this.LeftPressed) {
             this.rotateLeft();
         }
@@ -198,6 +224,7 @@ public class Tank extends Moveable{
 
         if(this.ShootPressed && TRE.tick % 20 == 0){
             Bullet b = new Bullet(x,y,vx,vy,angle, TRE.bulletImage,GameID.Bullet, this.handler);
+            b.setAttackPts(getTempAttackPts()); //modify the attack points
             this.ammo.add(b);
             //this.handler.addGameObject(b);
         }
@@ -214,11 +241,6 @@ public class Tank extends Moveable{
 
     private void rotateRight() {
         this.angle += this.ROTATIONSPEED;
-    }
-
-    @Override
-    void setR(){
-        R = 2;
     }
 
     private void moveBackwards() {

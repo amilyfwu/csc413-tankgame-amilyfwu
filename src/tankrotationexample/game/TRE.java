@@ -53,26 +53,7 @@ public class TRE extends JPanel implements Runnable {
                //this.t2.update(); // update tank
                this.repaint();   // redraw game
 
-//               if(this.t1.getHitBox().intersects(this.t2.getHitBox())){ //check for tank collisions
-//                   System.out.println("tanks are colliding");
-//                   this.t1.setCollision(true);
-//                   this.t2.setCollision(true);
-//               }
-//               for(int i = 0; i<this.walls.size() ;i++){
-//                   Rectangle wallHitBox = this.walls.get(i).getHitBox();
-//
-//                   //check bullet collision for wall or tank
-//
-//                   //check for wall and tank collision
-//                   if(wallHitBox.intersects(this.t1.getHitBox())){
-//                       this.t1.setCollision(true);
-//                       break;
-//                   }
-//                   if(wallHitBox.intersects(this.t2.getHitBox())){
-//                       this.t2.setCollision(true);
-//                       break;
-//                   }
-//               }
+               //when live reaches 0 then game is over and restarts
 
                 Thread.sleep(1000 / 144); //sleep for a few milliseconds
                 //System.out.println(t1);

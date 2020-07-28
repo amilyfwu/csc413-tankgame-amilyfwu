@@ -13,6 +13,7 @@ public class Bullet extends Moveable {
     //BufferedImage img;
     //Rectangle hitBox;
     Boolean show;
+    private int attackPts;
 
     public Bullet(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
         //this.x = x;
@@ -32,6 +33,14 @@ public class Bullet extends Moveable {
     void moveForwards(){
         setR();
         moveForward();
+    }
+
+    public int getAttackPts() {
+        return attackPts;
+    }
+
+    public void setAttackPts(int attackPts) {
+        this.attackPts = attackPts;
     }
 
     //void checkBorder was here

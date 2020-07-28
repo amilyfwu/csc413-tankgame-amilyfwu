@@ -6,7 +6,7 @@ import java.util.ConcurrentModificationException;
 
 public class Handler {
     ArrayList<GameObject> gameObjects = new ArrayList<>();
-    private int x1,y1,x2,y2;
+    private int x1,y1,x2,y2, hp1,hp2,live1,live2;
 
 
     public void update(){
@@ -34,10 +34,13 @@ public class Handler {
                 if (temp.getId() == GameID.Tank1) { //this is for the paintComponent moving tank screens
                     x1 = temp.getX();
                     y1 = temp.getY();
+                    hp1 = ((Tank)temp).getHp();
                 }
                 if (temp.getId() == GameID.Tank2) {
                     x2 = temp.getX();
                     y2 = temp.getY();
+                    hp2 = ((Tank)temp).getHp();
+
                 }
             });
         }catch (ConcurrentModificationException ex){}
@@ -73,6 +76,18 @@ public class Handler {
     }
     public int getTank2Y(){
         return y2;
+    }
+    public int getHp1() {
+        return hp1;
+    }
+    public int getHp2() {
+        return hp2;
+    }
+    public int getLive1() {
+        return live1;
+    }
+    public int getLive2() {
+        return live2;
     }
 
     public void resetTanks(){

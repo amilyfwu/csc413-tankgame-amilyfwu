@@ -26,6 +26,7 @@ public abstract class Moveable extends GameObject {
 
     abstract void moveForwards();
    // abstract void update();
+    //abstract void changeR(int changeR);
     abstract void setR();
   //  abstract void drawImage(Graphics g);
 
