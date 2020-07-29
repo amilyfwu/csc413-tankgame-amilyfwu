@@ -191,8 +191,8 @@ public class TRE extends JPanel implements Runnable {
             x1 = 0;
             return x1;
         }
-        if (x1 >= GameConstants.WORLD_WIDTH - 512) { //apparently it was screen width/2
-            x1 = GameConstants.WORLD_WIDTH - 512;
+        if (x1 >= GameConstants.WORLD_WIDTH - GameConstants.GAME_SCREEN_WIDTH/2) { //apparently it was screen width/2
+            x1 = GameConstants.WORLD_WIDTH - GameConstants.GAME_SCREEN_WIDTH/2;
             return x1;
         }
         return x1;
@@ -203,8 +203,8 @@ public class TRE extends JPanel implements Runnable {
             y1 = 0;
             return y1;
         }
-        if (y1 >= GameConstants.WORLD_HEIGHT - 768) { //screen height
-            y1 = GameConstants.WORLD_HEIGHT - 768;
+        if (y1 >= GameConstants.WORLD_HEIGHT - GameConstants.GAME_SCREEN_HEIGHT) { //screen height
+            y1 = GameConstants.WORLD_HEIGHT - GameConstants.GAME_SCREEN_HEIGHT;
             //System.out.println("yfsdf :" + y1);
             return y1;
         }
@@ -226,31 +226,31 @@ public class TRE extends JPanel implements Runnable {
         BufferedImage rightHalf = world.getSubimage(checkBorderScreenX(this.handler.getTank2X() - GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(this.handler.getTank2Y()-GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
         BufferedImage miniMap = world.getSubimage(0,0,GameConstants.WORLD_WIDTH,GameConstants.WORLD_HEIGHT);
         g2.drawImage(leftHalf,0,0,null);
-        g2.drawImage(rightHalf,GameConstants.GAME_SCREEN_WIDTH/2 + 6,0,null);
+        g2.drawImage(rightHalf,GameConstants.GAME_SCREEN_WIDTH/2 + 2,0,null);
 
         //hp bar
         g.setColor(Color.GRAY);
-        g.fillRect(120, 650, 200,20);
+        g.fillRect(103, 680, 200,20);
         g.setColor(Color.GREEN);
-        g.fillRect(120,650,this.handler.getHp1() * 2,20);
+        g.fillRect(103,680,this.handler.getHp1() * 2,20);
         g.setColor(Color.ORANGE);
-        g.drawRect(120, 650, 200,20);
+        g.drawRect(103, 680, 200,20);
 
         g.setColor(Color.WHITE);
-        g.drawString("Live Count: " + this.handler.getLive1(),120, 700);
+        g.drawString("Live Count: " + this.handler.getLive1(),103, 720);
 
         g.setColor(Color.GRAY);
-        g.fillRect(620, 650, 200,20);
+        g.fillRect(715, 680, 200,20);
         g.setColor(Color.GREEN);
-        g.fillRect(620,650,this.handler.getHp2() * 2,20);
+        g.fillRect(715,680,this.handler.getHp2() * 2,20);
         g.setColor(Color.ORANGE);
-        g.drawRect(620, 650, 200,20);
+        g.drawRect(715, 680, 200,20);
 
         g.setColor(Color.WHITE);
-        g.drawString("Live Count: " + this.handler.getLive2(),620, 700);
+        g.drawString("Live Count: " + this.handler.getLive2(),715, 720);
 
         g2.scale(.10,.10);
-        g2.drawImage(miniMap,4000,4000,null);
+        g2.drawImage(miniMap,4080,5230,null);
 
     }
 

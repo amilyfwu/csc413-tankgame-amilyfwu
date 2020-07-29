@@ -106,14 +106,14 @@ public class Handler {
                 ((Tank)temp).changeR(2);
 
             }
-            if(temp.getId() == GameID.Tank2){
+            else if(temp.getId() == GameID.Tank2){
                 temp.setX(600);
                 temp.setY(600);
                 ((Tank)temp).setHp(100);
                 ((Tank)temp).setLives(3);
                 ((Tank)temp).changeR(2);
             }
-            if(temp.getId() == GameID.Wall || temp.getId() == GameID.PowerUp){
+            else if(temp.getId() == GameID.Wall || temp.getId() == GameID.PowerUp){
                 ((Stationary)temp).setState(2);
             }
         }
