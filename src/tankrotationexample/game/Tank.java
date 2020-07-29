@@ -201,10 +201,11 @@ public class Tank extends Moveable{
                                     //lives left check
                                     //if hp is less than or equal to zero
                                     // the live count reduces by one and the hp is reset to 100 again
-                                    if(((Tank)gameObject).getHp()<=0){
+                                    if(((Tank)gameObject).getHp() <= 0){
                                         ((Tank)gameObject).setLives(((Tank)gameObject).getLives() - 1);
                                         ((Tank)gameObject).setHp(100);
                                     }
+
                                 }
                                 else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) {
                                     ((Breakable) gameObject).setState(1);

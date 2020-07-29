@@ -96,27 +96,91 @@ public class Handler {
     }
 
     public void resetObjects(){
-        for (int i = 0; i<gameObjects.size();i++){
-            GameObject temp = gameObjects.get(i);
-            if(temp.getId() == GameID.Tank1){
-               temp.setX(200);
-               temp.setY(200);
-                ((Tank)temp).setHp(100);
-                ((Tank)temp).setLives(3);
-                ((Tank)temp).changeR(2);
-
+//        for (int i = 0; i<gameObjects.size();i++){ //make this into a foreach
+//            GameObject temp = gameObjects.get(i);
+//            if(temp.getId() == GameID.Tank1){
+//                temp.setX(200);
+//                temp.setY(200);
+//                ((Tank)temp).setHp(100);
+//                ((Tank)temp).setLives(3);
+//                ((Tank)temp).changeR(2);
+//
+//            }
+//            else if(temp.getId() == GameID.Tank2){
+//                temp.setX(700);
+//                temp.setY(700);
+//                ((Tank)temp).setHp(100);
+//                ((Tank)temp).setLives(3);
+//                ((Tank)temp).changeR(2);
+//            }
+//            else if(temp.getId() == GameID.Wall || temp.getId() == GameID.PowerUp){
+//                ((Stationary)temp).setState(2);
+//            }
+//            switch (temp.getId()){
+//                case Tank1:
+//                    temp.setX(200);
+//                    temp.setY(200);
+//                    ((Tank)temp).setHp(100);
+//                    ((Tank)temp).setLives(3);
+//                    ((Tank)temp).changeR(2);
+//                    break;
+//                case Tank2:
+//                    temp.setX(600);
+//                    temp.setY(600);
+//                    ((Tank)temp).setHp(100);
+//                    ((Tank)temp).setLives(3);
+//                    ((Tank)temp).changeR(2);
+//                    break;
+//                case Wall:
+//                case PowerUp:
+//                    ((Stationary)temp).setState(2);
+//                    break;
+//            }
+//        }
+        gameObjects.forEach(gameObject -> {
+//            if(gameObject.getId() == GameID.Tank1){
+//                gameObject.setX(200);
+//                gameObject.setY(200);
+//                ((Tank)gameObject).setHp(100);
+//                ((Tank)gameObject).setLives(3);
+//                ((Tank)gameObject).changeR(2);
+//                ((Tank)gameObject).setTempAttackPts(10);
+//
+//            }
+//            else if(gameObject.getId() == GameID.Tank2){
+//                gameObject.setX(700);
+//                gameObject.setY(700);
+//                ((Tank)gameObject).setHp(100);
+//                ((Tank)gameObject).setLives(3);
+//                ((Tank)gameObject).changeR(2);
+//                ((Tank)gameObject).setTempAttackPts(10);
+//            }
+//            else if(gameObject.getId() == GameID.Wall || gameObject.getId() == GameID.PowerUp){
+//                ((Stationary)gameObject).setState(2);
+//            }
+            switch (gameObject.getId()){
+                case Tank1:
+                    gameObject.setX(200);
+                    gameObject.setY(200);
+                    ((Tank)gameObject).setHp(100);
+                    ((Tank)gameObject).setLives(3);
+                    ((Tank)gameObject).changeR(2);
+                    ((Tank)gameObject).setTempAttackPts(10);
+                    break;
+                case Tank2:
+                    gameObject.setX(600);
+                    gameObject.setY(600);
+                    ((Tank)gameObject).setHp(100);
+                    ((Tank)gameObject).setLives(3);
+                    ((Tank)gameObject).changeR(2);
+                    ((Tank)gameObject).setTempAttackPts(10);
+                    break;
+                case Wall:
+                case PowerUp:
+                    ((Stationary)gameObject).setState(2);
+                    break;
             }
-            else if(temp.getId() == GameID.Tank2){
-                temp.setX(600);
-                temp.setY(600);
-                ((Tank)temp).setHp(100);
-                ((Tank)temp).setLives(3);
-                ((Tank)temp).changeR(2);
-            }
-            else if(temp.getId() == GameID.Wall || temp.getId() == GameID.PowerUp){
-                ((Stationary)temp).setState(2);
-            }
-        }
+        });
     }
 
     public void collision(GameObject objectToCheck){

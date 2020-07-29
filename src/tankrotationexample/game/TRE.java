@@ -54,7 +54,10 @@ public class TRE extends JPanel implements Runnable {
                this.repaint();   // redraw game
 
                //when live reaches 0 then game is over and restarts
-
+               if(this.handler.getLive1() == 0 || this.handler.getLive2() == 0){
+                   this.lf.setFrame("end");
+                   return;
+               }
                 Thread.sleep(1000 / 144); //sleep for a few milliseconds
                 //System.out.println(t1);
                 /*
@@ -66,10 +69,6 @@ public class TRE extends JPanel implements Runnable {
 //                    this.lf.setFrame("end");
 //                    return;
 //                }
-               if(this.handler.getLive1() == 0 || this.handler.getLive2() == 0){
-                   this.lf.setFrame("end");
-                   return;
-               }
             }
        } catch (InterruptedException ignored) {
            System.out.println(ignored);
@@ -120,6 +119,7 @@ public class TRE extends JPanel implements Runnable {
             unBreakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile2.png")));
             powerUpSpd = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile6.png")));
             powerUpHp = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile5.png")));
+            powerUp2xDmg =read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile7.png")));
 
 
             InputStreamReader isr = new InputStreamReader(TRE.class.getClassLoader().getResourceAsStream("maps/map2.txt"));
@@ -156,6 +156,11 @@ public class TRE extends JPanel implements Runnable {
                         case "5":
                             PowerUpHp hp = new PowerUpHp(curCol*32, curRow*32, powerUpHp, GameID.PowerUp, this.handler);
                             this.handler.addGameObject(hp);
+                            break;
+                        case "6":
+                            PowerUp2xDmg dmg = new PowerUp2xDmg(curCol*32, curRow*32, powerUp2xDmg, GameID.PowerUp,this.handler);
+                            this.handler.addGameObject(dmg);
+                            break;
 
                     }
                 }
