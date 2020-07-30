@@ -12,7 +12,7 @@ public class Bullet extends Moveable {
     //int R = 7;
     //BufferedImage img;
     //Rectangle hitBox;
-    Boolean show;
+    //Boolean show;
     private int attackPts;
 
     public Bullet(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
@@ -22,7 +22,7 @@ public class Bullet extends Moveable {
         //this.img = img;
         //this.hitBox = new Rectangle(x,y, this.img.getWidth(),this.img.getHeight());
         super(x,y,vx,vy,angle,img,id, handler);
-        this.show = true;
+        //this.show = true;
     }
 
     @Override

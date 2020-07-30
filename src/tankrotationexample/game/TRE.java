@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -29,13 +30,14 @@ import static javax.imageio.ImageIO.read;
 public class TRE extends JPanel implements Runnable {
 
     private BufferedImage world; //the black screen
+    private BufferedImage bg;
+    private Color myColor = new Color(80,81,130);
     //private Tank t1;
     //private Tank t2; //added
     private Launcher lf;
     static long tick = 0; //this was private long static previously
     public static BufferedImage bulletImage;
-    //ArrayList<Wall> walls;
-
+    private ArrayList<Floor> floors;
     private Handler handler;
 
     public TRE(Launcher lf){
@@ -75,6 +77,10 @@ public class TRE extends JPanel implements Runnable {
        }
     }
 
+    private void setBGImg(BufferedImage img){
+        this.bg = img;
+    }
+
     /**
      * Reset game to its initial state.
      */
@@ -104,7 +110,13 @@ public class TRE extends JPanel implements Runnable {
         BufferedImage powerUpSpd = null;
         BufferedImage powerUpHp = null;
         BufferedImage powerUp2xDmg = null;
-       // walls = new ArrayList<>();
+        BufferedImage floorTile1 = null;
+        BufferedImage floorTile2 = null;
+        BufferedImage floorTile3 = null;
+        BufferedImage floorTile4 = null;
+        BufferedImage floorTile5 = null;
+
+        floors = new ArrayList<>();
         handler = new Handler();
 
         try {
@@ -116,11 +128,17 @@ public class TRE extends JPanel implements Runnable {
             t2img = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tank2.png")));
             TRE.bulletImage = read(TRE.class.getClassLoader().getResource("bullet1.png"));
             breakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile4.png")));
-            unBreakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile2.png")));
+            unBreakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile15.png")));
             powerUpSpd = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile6.png")));
             powerUpHp = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile5.png")));
-            powerUp2xDmg =read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile7.png")));
+            powerUp2xDmg = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile7.png")));
+            //floorTile1 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile16.png")));
+            floorTile2 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile1.png")));
+            floorTile3 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile10.png")));
+            floorTile4 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile12.png")));
+            floorTile5 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile11.png")));
 
+            //setBGImg(floorTile1);
 
             InputStreamReader isr = new InputStreamReader(TRE.class.getClassLoader().getResourceAsStream("maps/map2.txt"));
             BufferedReader mapReader = new BufferedReader(isr);
@@ -139,27 +157,26 @@ public class TRE extends JPanel implements Runnable {
                 for(int curCol = 0; curCol < numCols; curCol++ ){
                     switch (mapInfo[curCol]){
                         case "2":
-                            Breakable br = new Breakable(curCol*32, curRow*32, breakableWall,GameID.Wall, this.handler);
                             //this.walls.add(br);
-                            this.handler.addGameObject(br);
+                            this.handler.addGameObject(new Breakable(curCol*32, curRow*32, breakableWall,GameID.Wall, this.handler));
+                            this.floors.add(new Floor(curCol*32, curRow*32,floorTile5));
                             break;
                         case "3":
                         case "9":
-                            Unbreakable unBr = new Unbreakable(curCol*32, curRow*32, unBreakableWall,GameID.Wall,this.handler);
                             //this.walls.add(unBr);
-                            this.handler.addGameObject(unBr);
+                            this.handler.addGameObject(new Unbreakable(curCol*32, curRow*32, unBreakableWall,GameID.Wall,this.handler));
                             break;
                         case "4":
-                            PowerUpSpd spd = new PowerUpSpd(curCol*32, curRow*32, powerUpSpd, GameID.PowerUp, this.handler);
-                            this.handler.addGameObject(spd);
+                            this.handler.addGameObject(new PowerUpSpd(curCol*32, curRow*32, powerUpSpd, GameID.PowerUp, this.handler));
+                            this.floors.add(new Floor(curCol*32, curRow*32,floorTile2));
                             break;
                         case "5":
-                            PowerUpHp hp = new PowerUpHp(curCol*32, curRow*32, powerUpHp, GameID.PowerUp, this.handler);
-                            this.handler.addGameObject(hp);
+                            this.handler.addGameObject(new PowerUpHp(curCol*32, curRow*32, powerUpHp, GameID.PowerUp, this.handler));
+                            this.floors.add(new Floor(curCol*32, curRow*32,floorTile3));
                             break;
                         case "6":
-                            PowerUp2xDmg dmg = new PowerUp2xDmg(curCol*32, curRow*32, powerUp2xDmg, GameID.PowerUp,this.handler);
-                            this.handler.addGameObject(dmg);
+                            this.handler.addGameObject(new PowerUp2xDmg(curCol*32, curRow*32, powerUp2xDmg, GameID.PowerUp,this.handler));
+                            this.floors.add(new Floor(curCol*32, curRow*32,floorTile4));
                             break;
 
                     }
@@ -221,11 +238,13 @@ public class TRE extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
         super.paintComponent(g2); //added
         Graphics2D buffer = world.createGraphics();
-        buffer.setColor(Color.BLACK);
+        buffer.setColor(myColor);
         buffer.fillRect(0,0,GameConstants.WORLD_WIDTH,GameConstants.WORLD_HEIGHT);
+        //buffer.drawImage(bg,0,0,null);
         //this.walls.forEach(wall -> wall.drawImage(buffer));
         //this.t1.drawImage(buffer);
         //this.t2.drawImage(buffer);
+        this.floors.forEach(floor -> floor.drawImage(buffer)); //draw floor
         this.handler.drawImage(buffer); // draw all gameObjects
         BufferedImage leftHalf = world.getSubimage(checkBorderScreenX(this.handler.getTank1X() - GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(this.handler.getTank1Y() - GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
         BufferedImage rightHalf = world.getSubimage(checkBorderScreenX(this.handler.getTank2X() - GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(this.handler.getTank2Y()-GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);

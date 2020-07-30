@@ -160,20 +160,20 @@ public class Handler {
 //            }
             switch (gameObject.getId()){
                 case Tank1:
+                    ((Tank)gameObject).setHp(100);
+                    ((Tank)gameObject).setLives(3);
+                    ((Tank)gameObject).changeR(2);
+                    ((Tank)gameObject).setTempAttackPts(10);
                     gameObject.setX(200);
                     gameObject.setY(200);
-                    ((Tank)gameObject).setHp(100);
-                    ((Tank)gameObject).setLives(3);
-                    ((Tank)gameObject).changeR(2);
-                    ((Tank)gameObject).setTempAttackPts(10);
                     break;
                 case Tank2:
-                    gameObject.setX(600);
-                    gameObject.setY(600);
                     ((Tank)gameObject).setHp(100);
                     ((Tank)gameObject).setLives(3);
                     ((Tank)gameObject).changeR(2);
                     ((Tank)gameObject).setTempAttackPts(10);
+                    gameObject.setX(600);
+                    gameObject.setY(600);
                     break;
                 case Wall:
                 case PowerUp:

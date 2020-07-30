@@ -191,11 +191,12 @@ public class Tank extends Moveable{
                             //bullet hitting gameObjects and removing that bullet
                             if (bullet.getHitBox().intersects(gameObject.getHitBox())) {
                                 if((gameIDTemp == GameID.Wall && gameObject instanceof Breakable && ((Breakable) gameObject).getState() == 1) || gameIDTemp == GameID.PowerUp ){
+                                    //bullets ignore breakable walls that were already broken, power ups
                                 }
                                 else{
                                     this.ammo.remove(bullet);
                                 }
-                                if (gameIDTemp == GameID.Tank1 || gameIDTemp == GameID.Tank2) {
+                                if (gameIDTemp == GameID.Tank1 || gameIDTemp == GameID.Tank2) { //if the bullet hit the tank reduce the hp or lives
                                     //health bar
                                     ((Tank)gameObject).setHp(((Tank)gameObject).getHp() - bullet.getAttackPts());
                                     //lives left check
@@ -207,7 +208,7 @@ public class Tank extends Moveable{
                                     }
 
                                 }
-                                else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) {
+                                else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) { //if bullet hits a breakable wall, breakable wall breaks
                                     ((Breakable) gameObject).setState(1);
                                     //if getState is more than zero reduce the state by 1;
                                     //if getState is zero dont do anything
