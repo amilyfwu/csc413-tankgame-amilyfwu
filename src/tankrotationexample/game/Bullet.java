@@ -14,6 +14,7 @@ public class Bullet extends Moveable {
     //Rectangle hitBox;
     //Boolean show;
     private int attackPts;
+    private boolean borderBullet;
 
     public Bullet(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
         //this.x = x;
@@ -23,6 +24,15 @@ public class Bullet extends Moveable {
         //this.hitBox = new Rectangle(x,y, this.img.getWidth(),this.img.getHeight());
         super(x,y,vx,vy,angle,img,id, handler);
         //this.show = true;
+        this.borderBullet = false;
+    }
+
+    public boolean isBorderBullet() {
+        return borderBullet;
+    }
+
+    public void setBorderBullet(boolean borderBullet) {
+        this.borderBullet = borderBullet;
     }
 
     @Override
@@ -48,6 +58,10 @@ public class Bullet extends Moveable {
     public void update(){
         moveForwards();
         //if it hits something it disappears
+        if(x == 30 || x == GameConstants.WORLD_WIDTH - 88 || y == 40 || y == GameConstants.WORLD_HEIGHT - 80){
+            System.out.println("im bullet ");
+            setBorderBullet(true);
+        }
     }
 
     public void drawImage(Graphics g){

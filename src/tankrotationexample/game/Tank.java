@@ -190,8 +190,8 @@ public class Tank extends Moveable{
                         this.ammo.forEach(bullet -> {
                             //bullet hitting gameObjects and removing that bullet
                             if (bullet.getHitBox().intersects(gameObject.getHitBox())) {
-                                if((gameIDTemp == GameID.Wall && gameObject instanceof Breakable && ((Breakable) gameObject).getState() == 1) || gameIDTemp == GameID.PowerUp ){
-                                    //bullets ignore breakable walls that were already broken, power ups
+                                if((gameIDTemp == GameID.Wall && gameObject instanceof Breakable && ((Breakable) gameObject).getState() == 1) || gameIDTemp == GameID.PowerUp){
+                                    //bullets ignore breakable walls that were already broken, power ups, if bullet reaches the outer walls
                                 }
                                 else{
                                     this.ammo.remove(bullet);
@@ -213,6 +213,9 @@ public class Tank extends Moveable{
                                     //if getState is more than zero reduce the state by 1;
                                     //if getState is zero dont do anything
                                 }
+                            }
+                            if(bullet.isBorderBullet()){ //if the bullet is on the outer walls
+                                this.ammo.remove(bullet);
                             }
                         });
                     } catch (ConcurrentModificationException ex) {}

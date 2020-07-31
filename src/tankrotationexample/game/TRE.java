@@ -128,13 +128,13 @@ public class TRE extends JPanel implements Runnable {
             t2img = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tank2.png")));
             TRE.bulletImage = read(TRE.class.getClassLoader().getResource("bullet1.png"));
             breakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile4.png")));
-            unBreakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile15.png")));
+            unBreakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile14.png")));
             powerUpSpd = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile6.png")));
             powerUpHp = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile5.png")));
             powerUp2xDmg = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile7.png")));
-            //floorTile1 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile16.png")));
-            floorTile2 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile1.png")));
-            floorTile3 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile10.png")));
+            floorTile1 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile15.png")));
+            floorTile2 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile10.png")));
+            floorTile3 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile1.png")));
             floorTile4 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile12.png")));
             floorTile5 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile11.png")));
 
@@ -156,29 +156,30 @@ public class TRE extends JPanel implements Runnable {
                 mapInfo = row.split("\t");
                 for(int curCol = 0; curCol < numCols; curCol++ ){
                     switch (mapInfo[curCol]){
-                        case "2":
+                        case "2": //breakable wall
                             //this.walls.add(br);
                             this.handler.addGameObject(new Breakable(curCol*32, curRow*32, breakableWall,GameID.Wall, this.handler));
                             this.floors.add(new Floor(curCol*32, curRow*32,floorTile5));
                             break;
-                        case "3":
-                        case "9":
+                        case "3": //unbreakable wall
                             //this.walls.add(unBr);
                             this.handler.addGameObject(new Unbreakable(curCol*32, curRow*32, unBreakableWall,GameID.Wall,this.handler));
                             break;
-                        case "4":
+                        case "4": //Speed powerup
                             this.handler.addGameObject(new PowerUpSpd(curCol*32, curRow*32, powerUpSpd, GameID.PowerUp, this.handler));
                             this.floors.add(new Floor(curCol*32, curRow*32,floorTile2));
                             break;
-                        case "5":
+                        case "5": //HP powerup
                             this.handler.addGameObject(new PowerUpHp(curCol*32, curRow*32, powerUpHp, GameID.PowerUp, this.handler));
                             this.floors.add(new Floor(curCol*32, curRow*32,floorTile3));
                             break;
-                        case "6":
+                        case "6": //2x dmg powerup
                             this.handler.addGameObject(new PowerUp2xDmg(curCol*32, curRow*32, powerUp2xDmg, GameID.PowerUp,this.handler));
                             this.floors.add(new Floor(curCol*32, curRow*32,floorTile4));
                             break;
-
+                        case "9": //outer wall
+                            this.floors.add(new Floor(curCol*32, curRow*32,floorTile1));
+                            break;
                     }
                 }
             }
@@ -191,7 +192,7 @@ public class TRE extends JPanel implements Runnable {
         //tanks were created here
         ////moved tanks here
         Tank t1 = new Tank(200, 200, 0, 0, 0, t1img, GameID.Tank1, this.handler);
-        Tank t2 = new Tank(600, 600, 0, 0, 180, t2img, GameID.Tank2, this.handler); //should be a different image
+        Tank t2 = new Tank(1800, 1800, 0, 0, 180, t2img, GameID.Tank2, this.handler); //should be a different image
         TankControl tc1 = new TankControl(t1, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
         TankControl tc2 = new TankControl(t2, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
 

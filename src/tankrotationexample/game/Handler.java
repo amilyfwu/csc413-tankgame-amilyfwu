@@ -172,8 +172,8 @@ public class Handler {
                     ((Tank)gameObject).setLives(3);
                     ((Tank)gameObject).changeR(2);
                     ((Tank)gameObject).setTempAttackPts(10);
-                    gameObject.setX(600);
-                    gameObject.setY(600);
+                    gameObject.setX(1800);
+                    gameObject.setY(1800);
                     break;
                 case Wall:
                 case PowerUp:
