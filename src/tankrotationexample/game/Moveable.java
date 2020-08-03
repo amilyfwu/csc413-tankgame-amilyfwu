@@ -76,8 +76,8 @@ public abstract class Moveable extends GameObject {
     }
 
     void moveBackward(){
-        vx = ((int) Math.round(R*Math.cos(Math.toRadians(angle)))*-1);
-        vy = ((int) Math.round(R*Math.sin(Math.toRadians(angle)))*-1);
+        vx = ((int) Math.round(R*Math.cos(Math.toRadians(angle))))*-1;
+        vy = ((int) Math.round(R*Math.sin(Math.toRadians(angle))))*-1;
         x += vx;
         y += vy;
         checkBorder();

@@ -159,7 +159,7 @@ public class Tank extends Moveable{
         this.collide = false;
     }
 
-    private void doCollision2(){
+    private void checkAllCollision(){
         this.handler.getGameObjects().forEach(gameObject -> {
             GameID gameIDTemp = gameObject.getId();
             //tank colliding will walls
@@ -191,8 +191,8 @@ public class Tank extends Moveable{
 
     private void checkBulletCollision(GameObject gameObject, Bullet bullet,GameID gameIDTemp) {
         if (bullet.getHitBox().intersects(gameObject.getHitBox())) {
-            if((gameIDTemp == GameID.Wall && gameObject instanceof Breakable && ((Breakable) gameObject).getState() == 1) || gameIDTemp == GameID.PowerUp){
-                //bullets ignore breakable walls that were already broken, power ups, if bullet reaches the outer walls
+            if((gameIDTemp == GameID.Wall && gameObject instanceof Breakable && ((Breakable) gameObject).getState() <= 0) || gameIDTemp == GameID.PowerUp){
+                //bullets ignore breakable walls that were already broken, power ups
             }
             else{
                 this.ammo.remove(bullet);
@@ -210,7 +210,7 @@ public class Tank extends Moveable{
 
             }
             else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) { //if bullet hits a breakable wall, breakable wall breaks
-                ((Breakable) gameObject).setState(1);
+                ((Breakable) gameObject).setState(((Breakable) gameObject).getState()-1);
                 //if getState is more than zero reduce the state by 1;
                 //if getState is zero dont do anything
             }
@@ -249,29 +249,31 @@ public class Tank extends Moveable{
     }
 
     private void checkWallCollision(GameObject gameObject) {
-        if (this.getBoundH().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)) {
-            //setCollision(true);
-            if(getVx() > 0){ //right
-                setVx(0);
-                setX((int) gameObject.getHitBox().getX() - 55);
-            }else if(getVx() < 0){ //left
-                setVx(0);
-                setX((int) gameObject.getHitBox().getMaxX() + 10);
+        if(((Wall) gameObject).getState() > 0){ //state must be either 2 or 1
+            if (this.getBoundH().intersects(gameObject.getHitBox())) {
+                //setCollision(true);
+                if (getVx() > 0) { //right
+                    setVx(0);
+                    setX((int) gameObject.getHitBox().getX() - 55);
+                } else if (getVx() < 0) { //left
+                    setVx(0);
+                    setX((int) gameObject.getHitBox().getMaxX() + 10);
+                }
             }
-        }
-        if(this.getBoundV().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)){ //getBounds apparently not needed?
-            if(getVy() > 0){ //down
-                setVy(0);
-                setY((int) gameObject.getHitBox().getY() - 55);
-            }else if(getVy() < 0){ //up
-                setVy(0);
-                setY((int) gameObject.getHitBox().getMaxY() + 10);
+            if (this.getBoundV().intersects(gameObject.getHitBox())) { //getBounds apparently not needed?
+                if (getVy() > 0) { //down
+                    setVy(0);
+                    setY((int) gameObject.getHitBox().getY() - 55);
+                } else if (getVy() < 0) { //up
+                    setVy(0);
+                    setY((int) gameObject.getHitBox().getMaxY() + 10);
+                }
             }
         }
     }
 
     public void update() {
-        doCollision2();
+        checkAllCollision();
         if(this.collide){
             doCollision();
         }else {
@@ -282,24 +284,18 @@ public class Tank extends Moveable{
                 this.moveBackwards();
             }
         }
-
         if (this.LeftPressed) {
             this.rotateLeft();
         }
         if (this.RightPressed) {
             this.rotateRight();
         }
-
         if(this.ShootPressed && TRE.tick % 20 == 0){
             Bullet b = new Bullet(x,y,vx,vy,angle, TRE.bulletImage,GameID.Bullet, this.handler);
             b.setAttackPts(getTempAttackPts()); //modify the attack points
             this.ammo.add(b);
         }
         this.ammo.forEach(bullet -> bullet.update());
- //       for(int i = 0 ; i < this.ammo.size(); i++){
- //           this.ammo.get(i).update();
- //           }
-        //if some ammo object intersects another object then remove that ammo from the list
     }
 
     @Override
@@ -313,10 +309,9 @@ public class Tank extends Moveable{
         rotation.rotate(Math.toRadians(angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(this.img, rotation, null);
-        //added 46:00
         this.ammo.forEach(bullet -> bullet.drawImage(g));
-        g2d.setColor(Color.BLUE);
-        g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
+        //g2d.setColor(Color.BLUE);
+        //g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
     }
 
 

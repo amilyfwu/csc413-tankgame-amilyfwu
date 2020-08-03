@@ -107,6 +107,7 @@ public class TRE extends JPanel implements Runnable {
         BufferedImage t1img = null;
         BufferedImage t2img = null;
         BufferedImage breakableWall = null;
+        BufferedImage breakableWall2 = null;
         BufferedImage unBreakableWall = null;
         BufferedImage powerUpSpd = null;
         BufferedImage powerUpHp = null;
@@ -129,6 +130,7 @@ public class TRE extends JPanel implements Runnable {
             t2img = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tank2.png")));
             TRE.bulletImage = read(TRE.class.getClassLoader().getResource("bullet1.png"));
             breakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile4.png")));
+            breakableWall2 = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile4pt2.png")));
             unBreakableWall = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile14.png")));
             powerUpSpd = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile6.png")));
             powerUpHp = read(Objects.requireNonNull(TRE.class.getClassLoader().getResource("tile5.png")));
@@ -159,7 +161,7 @@ public class TRE extends JPanel implements Runnable {
                     switch (mapInfo[curCol]){
                         case "2": //breakable wall
                             //this.walls.add(br);
-                            this.handler.addGameObject(new Breakable(curCol*32, curRow*32, breakableWall,GameID.Wall, this.handler));
+                            this.handler.addGameObject(new Breakable(curCol*32, curRow*32, breakableWall,GameID.Wall, this.handler, breakableWall2));
                             this.floors.add(new Floor(curCol*32, curRow*32,floorTile5));
                             break;
                         case "3": //unbreakable wall
