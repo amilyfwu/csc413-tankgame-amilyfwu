@@ -32,8 +32,6 @@ public class TRE extends JPanel implements Runnable {
     private BufferedImage world; //the black screen
     private BufferedImage bg;
     private Color myColor;
-    //private Tank t1;
-    //private Tank t2; //added
     private Launcher lf;
     static long tick = 0; //this was private long static previously
     public static BufferedImage bulletImage;
@@ -52,8 +50,6 @@ public class TRE extends JPanel implements Runnable {
            while (true) {
                this.tick++;
                handler.update(); //update all gameObjects
-               //this.t1.update(); // update tank
-               //this.t2.update(); // update tank
                this.repaint();   // redraw game
 
                //when live reaches 0 then game is over and restarts
@@ -76,10 +72,6 @@ public class TRE extends JPanel implements Runnable {
        } catch (InterruptedException ignored) {
            System.out.println(ignored);
        }
-    }
-
-    private void setBGImg(BufferedImage img){
-        this.bg = img;
     }
 
     /**
@@ -192,8 +184,6 @@ public class TRE extends JPanel implements Runnable {
             ex.printStackTrace();
         }
 
-        //tanks were created here
-        ////moved tanks here
         Tank t1 = new Tank(200, 200, 0, 0, 0, t1img, GameID.Tank1, this.handler);
         Tank t2 = new Tank(1800, 1800, 0, 0, 180, t2img, GameID.Tank2, this.handler); //should be a different image
         TankControl tc1 = new TankControl(t1, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
@@ -244,10 +234,6 @@ public class TRE extends JPanel implements Runnable {
         Graphics2D buffer = world.createGraphics();
         buffer.setColor(myColor);
         buffer.fillRect(0,0,GameConstants.WORLD_WIDTH,GameConstants.WORLD_HEIGHT);
-        //buffer.drawImage(bg,0,0,null);
-        //this.walls.forEach(wall -> wall.drawImage(buffer));
-        //this.t1.drawImage(buffer);
-        //this.t2.drawImage(buffer);
         this.floors.forEach(floor -> floor.drawImage(buffer)); //draw floor
         this.handler.drawImage(buffer); // draw all gameObjects
         BufferedImage leftHalf = world.getSubimage(checkBorderScreenX(this.handler.getTank1X() - GameConstants.GAME_SCREEN_WIDTH/4),checkBorderScreenY(this.handler.getTank1Y() - GameConstants.GAME_SCREEN_HEIGHT/2),GameConstants.GAME_SCREEN_WIDTH/2,GameConstants.GAME_SCREEN_HEIGHT);
