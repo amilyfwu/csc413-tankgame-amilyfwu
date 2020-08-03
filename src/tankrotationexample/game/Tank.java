@@ -18,6 +18,11 @@ public class Tank extends Moveable{
 
     private final float ROTATIONSPEED = 3.0f;
     private ArrayList<Bullet> ammo;
+    private int tempX;
+    private int tempY;
+
+    private Rectangle hitboxH;
+    private Rectangle hitboxV;
 
     //Tank stats
     private int hp = 100;
@@ -35,6 +40,8 @@ public class Tank extends Moveable{
     Tank(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
         super(x,y,vx,vy,angle,img,id,handler);
         this.ammo = new ArrayList<>();
+        hitboxH = new Rectangle(getX()+getVx(),getY(),this.img.getWidth()+ getVx()/2, this.img.getHeight());
+        hitboxV = new Rectangle(getX(),getY() + getVy(),this.img.getWidth(), this.img.getHeight()+getVy()/2);
     }
 
     void setCollision(boolean collide){
@@ -127,14 +134,40 @@ public class Tank extends Moveable{
         this.collide = false;
     }
 
+    public Rectangle getBoundH(){
+        hitboxH.setBounds(getX()+getVx(),getY(),this.img.getWidth()+ getVx()/2, this.img.getHeight());
+        return hitboxH;
+    }
+    public Rectangle getBoundV(){
+        hitboxV.setBounds(getX(),getY() + getVy(),this.img.getWidth(), this.img.getHeight()+getVy()/2);
+        return hitboxV;
+    }
+
     private void doCollision2(){
         try {
             this.handler.getGameObjects().forEach(gameObject -> {
                 GameID gameIDTemp = gameObject.getId();
                 //tank colliding will walls
                 if (gameIDTemp == GameID.Wall && gameObject instanceof Wall) {
-                    if (this.getHitBox().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)) {
-                        setCollision(true);
+                    if (this.getBoundH().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)) {
+                        //setCollision(true);
+                        if(getVx()> 0){ //right
+                            vx = 0;
+                            x = (int) gameObject.getHitBox().getX()-55;
+                            System.out.println("minX: "+(int) gameObject.getHitBox().getMinX() +" x:" + (int) gameObject.getHitBox().getX() + " my tanks x position: " + x);
+                        }else if(getVx() < 0){ //left
+                            vx = 0;
+                            x = (int) gameObject.getHitBox().getMaxX();
+                        }
+                    }
+                    else if(this.getBoundV().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)){
+                        if(getVy()>0){
+                            vy = 0;
+                            y = (int) gameObject.getHitBox().getY() -55;
+                        }else if(getVy()<0){
+                            vy = 0;
+                            y = (int) gameObject.getHitBox().getMaxY();
+                        }
                     }
                 }
                 //tank colliding with tank
@@ -272,8 +305,8 @@ public class Tank extends Moveable{
         g2d.drawImage(this.img, rotation, null);
         //added 46:00
         this.ammo.forEach(bullet -> bullet.drawImage(g));
-        //g2d.setColor(Color.BLUE);
-        //g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
+        g2d.setColor(Color.BLUE);
+        g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
     }
 
 
