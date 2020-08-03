@@ -18,16 +18,14 @@ public class Tank extends Moveable{
 
     private final float ROTATIONSPEED = 3.0f;
     private ArrayList<Bullet> ammo;
-    private int tempX;
-    private int tempY;
 
-    private Rectangle hitboxH;
-    private Rectangle hitboxV;
+    private Rectangle hitboxH; //horizontal
+    private Rectangle hitboxV; //vertical
 
     //Tank stats
     private int hp = 100;
     private int lives = 3; //live 3 times
-    private int tempR = 2; //Temporary speed
+    private int tempR = 2; //Temporary speed and a way to Change the speed
     private int tempAttackPts = 10; //Temporary atk pts to pass into bullet class
 
     private boolean UpPressed;
@@ -80,6 +78,15 @@ public class Tank extends Moveable{
         tempR = changeR;
     }
 
+    public Rectangle getBoundH(){ //two rectangle going slightly ahead of the tank rectangle to check for collision
+        hitboxH.setBounds(getX() + getVx(),getY(),this.img.getWidth() + getVx()/2, this.img.getHeight());
+        return hitboxH;
+    }
+    public Rectangle getBoundV(){
+        hitboxV.setBounds(getX(),getY() + getVy(),this.img.getWidth(), this.img.getHeight()+getVy()/2);
+        return hitboxV;
+    }
+
     void toggleUpPressed() {
         this.UpPressed = true;
     }
@@ -120,6 +127,24 @@ public class Tank extends Moveable{
         this.ShootPressed = false;
     }
 
+    private void rotateLeft() {
+        this.angle -= this.ROTATIONSPEED;
+    }
+
+    private void rotateRight() {
+        this.angle += this.ROTATIONSPEED;
+    }
+
+    private void moveBackwards() {
+        setR();
+        moveBackward();
+    }
+
+    void moveForwards() {
+        setR();
+        moveForward();
+    }
+
     private void doCollision(){
         if(this.UpPressed){
             for(int i = 0; i<=5; i++){
@@ -132,15 +157,6 @@ public class Tank extends Moveable{
             }
         }
         this.collide = false;
-    }
-
-    public Rectangle getBoundH(){ //two rectangle going slightly ahead of the tank rectangle to check for collision
-        hitboxH.setBounds(getX() + getVx(),getY(),this.img.getWidth() + getVx()/2, this.img.getHeight());
-        return hitboxH;
-    }
-    public Rectangle getBoundV(){
-        hitboxV.setBounds(getX(),getY() + getVy(),this.img.getWidth(), this.img.getHeight()+getVy()/2);
-        return hitboxV;
     }
 
     private void doCollision2(){
@@ -208,7 +224,7 @@ public class Tank extends Moveable{
         if(this.getHitBox().intersects(gameObject.getHitBox())){
             //powerup : hp, speed, and 2x damage
             if(gameObject instanceof PowerUpHp){
-                if(hp < 100){
+                if(getHp() < 100){
                     setHp(getHp() + 10);
                 }
                 ((PowerUpHp) gameObject).setState(1);
@@ -233,23 +249,23 @@ public class Tank extends Moveable{
     }
 
     private void checkWallCollision(GameObject gameObject) {
-        if (this.getBoundH().getBounds().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)) {
+        if (this.getBoundH().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)) {
             //setCollision(true);
-            if(getVx()> 0){ //right
-                vx = 0;
-                x = (int) gameObject.getHitBox().getX() - 55;
+            if(getVx() > 0){ //right
+                setVx(0);
+                setX((int) gameObject.getHitBox().getX() - 55);
             }else if(getVx() < 0){ //left
-                vx = 0;
-                x = (int) gameObject.getHitBox().getMaxX() + 10;
+                setVx(0);
+                setX((int) gameObject.getHitBox().getMaxX() + 10);
             }
         }
-        if(this.getBoundV().getBounds().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)){
-            if(getVy()>0){ //down
-                vy = 0;
-                y = (int) gameObject.getHitBox().getY() - 55;
-            }else if(getVy()<0){ //up
-                vy = 0;
-                y = (int) gameObject.getHitBox().getMaxY() + 10;
+        if(this.getBoundV().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)){ //getBounds apparently not needed?
+            if(getVy() > 0){ //down
+                setVy(0);
+                setY((int) gameObject.getHitBox().getY() - 55);
+            }else if(getVy() < 0){ //up
+                setVy(0);
+                setY((int) gameObject.getHitBox().getMaxY() + 10);
             }
         }
     }
@@ -284,24 +300,6 @@ public class Tank extends Moveable{
  //           this.ammo.get(i).update();
  //           }
         //if some ammo object intersects another object then remove that ammo from the list
-    }
-
-    private void rotateLeft() {
-        this.angle -= this.ROTATIONSPEED;
-    }
-
-    private void rotateRight() {
-        this.angle += this.ROTATIONSPEED;
-    }
-
-    private void moveBackwards() {
-        setR();
-        moveBackward();
-    }
-
-    void moveForwards() {
-        setR();
-        moveForward();
     }
 
     @Override
