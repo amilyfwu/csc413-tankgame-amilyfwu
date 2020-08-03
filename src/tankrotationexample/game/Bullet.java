@@ -7,13 +7,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Bullet extends Moveable {
-    //Boolean show;
     private int attackPts;
     private boolean borderBullet;
 
     public Bullet(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
         super(x,y,vx,vy,angle,img,id, handler);
-        //this.show = true;
         this.borderBullet = false;
     }
 

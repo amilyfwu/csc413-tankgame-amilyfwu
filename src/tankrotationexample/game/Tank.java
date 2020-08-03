@@ -209,8 +209,8 @@ public class Tank extends Moveable{
                 }
 
             }
-            else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) { //if bullet hits a breakable wall, breakable wall breaks
-                ((Breakable) gameObject).setState(((Breakable) gameObject).getState()-1);
+            else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) { //if bullet hits a breakable wall two times, breakable wall breaks
+                ((Breakable) gameObject).setState(((Breakable) gameObject).getState() - 1);
                 //if getState is more than zero reduce the state by 1;
                 //if getState is zero dont do anything
             }
@@ -251,7 +251,6 @@ public class Tank extends Moveable{
     private void checkWallCollision(GameObject gameObject) {
         if(((Wall) gameObject).getState() > 0){ //state must be either 2 or 1
             if (this.getBoundH().intersects(gameObject.getHitBox())) {
-                //setCollision(true);
                 if (getVx() > 0) { //right
                     setVx(0);
                     setX((int) gameObject.getHitBox().getX() - 55);
@@ -260,7 +259,7 @@ public class Tank extends Moveable{
                     setX((int) gameObject.getHitBox().getMaxX() + 10);
                 }
             }
-            if (this.getBoundV().intersects(gameObject.getHitBox())) { //getBounds apparently not needed?
+            if (this.getBoundV().intersects(gameObject.getHitBox())) { //getBounds method apparently not needed?
                 if (getVy() > 0) { //down
                     setVy(0);
                     setY((int) gameObject.getHitBox().getY() - 55);
@@ -307,9 +306,9 @@ public class Tank extends Moveable{
     public void drawImage(Graphics g) {
         AffineTransform rotation = AffineTransform.getTranslateInstance(x, y);
         rotation.rotate(Math.toRadians(angle), this.img.getWidth() / 2.0, this.img.getHeight() / 2.0);
+        this.ammo.forEach(bullet -> bullet.drawImage(g)); //draw bullet before the tank so it is under
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(this.img, rotation, null);
-        this.ammo.forEach(bullet -> bullet.drawImage(g));
         //g2d.setColor(Color.BLUE);
         //g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
     }

@@ -30,19 +30,6 @@ public class Handler {
                     live2 = ((Tank)gameObject).getLives();
                     break;
             }
-//            if (gameObject.getId() == GameID.Tank1) {
-//                x1 = gameObject.getX();
-//                y1 = gameObject.getY();
-//                hp1 = ((Tank)gameObject).getHp();
-//                live1 = ((Tank)gameObject).getLives();
-//            }
-//            if (gameObject.getId() == GameID.Tank2) {
-//                x2 = gameObject.getX();
-//                y2 = gameObject.getY();
-//                hp2 = ((Tank)gameObject).getHp();
-//                live2 = ((Tank)gameObject).getLives();
-//
-//            }
         });
     }
 

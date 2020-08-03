@@ -2,7 +2,6 @@ package tankrotationexample.game;
 
 import tankrotationexample.GameConstants;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class Moveable extends GameObject {
