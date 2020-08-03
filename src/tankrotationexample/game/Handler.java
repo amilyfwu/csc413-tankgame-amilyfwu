@@ -14,37 +14,42 @@ public class Handler {
 
     public void update(){
         //this.gameObjects.forEach(gameObject -> gameObject.update());
-        try {
-            this.gameObjects.forEach(gameObject -> {
-                GameObject temp = gameObject;
-                temp.update();  //updates all the gameObjects
-
-                if (temp.getId() == GameID.Tank1) { //this is for the TRE paintComponent
-                    x1 = temp.getX();
-                    y1 = temp.getY();
-                    hp1 = ((Tank)temp).getHp();
-                    live1 = ((Tank)temp).getLives();
-                }
-                if (temp.getId() == GameID.Tank2) {
-                    x2 = temp.getX();
-                    y2 = temp.getY();
-                    hp2 = ((Tank)temp).getHp();
-                    live2 = ((Tank)temp).getLives();
-
-                }
-            });
-        }catch (ConcurrentModificationException ex){}
+        this.gameObjects.forEach(gameObject -> {
+            gameObject.update();  //updates all the gameObjects
+            switch (gameObject.getId()){ //this is for the TRE paintComponent
+                case Tank1:
+                    x1 = gameObject.getX();
+                    y1 = gameObject.getY();
+                    hp1 = ((Tank)gameObject).getHp();
+                    live1 = ((Tank)gameObject).getLives();
+                    break;
+                case Tank2:
+                    x2 = gameObject.getX();
+                    y2 = gameObject.getY();
+                    hp2 = ((Tank)gameObject).getHp();
+                    live2 = ((Tank)gameObject).getLives();
+                    break;
+            }
+//            if (gameObject.getId() == GameID.Tank1) {
+//                x1 = gameObject.getX();
+//                y1 = gameObject.getY();
+//                hp1 = ((Tank)gameObject).getHp();
+//                live1 = ((Tank)gameObject).getLives();
+//            }
+//            if (gameObject.getId() == GameID.Tank2) {
+//                x2 = gameObject.getX();
+//                y2 = gameObject.getY();
+//                hp2 = ((Tank)gameObject).getHp();
+//                live2 = ((Tank)gameObject).getLives();
+//
+//            }
+        });
     }
 
     public void drawImage(Graphics g){
-//        for (int i = 0; i<gameObjects.size();i++){
-//            GameObject temp = gameObjects.get(i);
-//            temp.drawImage(g);
-//        }
-        try {
+        try{
             this.gameObjects.forEach(gameObject -> gameObject.drawImage(g));
         }catch (ConcurrentModificationException ex){}
-
     }
 
     public void addGameObject(GameObject temp){
@@ -82,26 +87,6 @@ public class Handler {
 
     public void resetObjects(){
         gameObjects.forEach(gameObject -> {
-//            if(gameObject.getId() == GameID.Tank1){
-//                gameObject.setX(200);
-//                gameObject.setY(200);
-//                ((Tank)gameObject).setHp(100);
-//                ((Tank)gameObject).setLives(3);
-//                ((Tank)gameObject).changeR(2);
-//                ((Tank)gameObject).setTempAttackPts(10);
-//
-//            }
-//            else if(gameObject.getId() == GameID.Tank2){
-//                gameObject.setX(700);
-//                gameObject.setY(700);
-//                ((Tank)gameObject).setHp(100);
-//                ((Tank)gameObject).setLives(3);
-//                ((Tank)gameObject).changeR(2);
-//                ((Tank)gameObject).setTempAttackPts(10);
-//            }
-//            else if(gameObject.getId() == GameID.Wall || gameObject.getId() == GameID.PowerUp){
-//                ((Stationary)gameObject).setState(2);
-//            }
             switch (gameObject.getId()){
                 case Wall:
                 case PowerUp:
@@ -132,15 +117,4 @@ public class Handler {
             }
         });
     }
-
-    public void collision(GameObject objectToCheck){
-        this.gameObjects.forEach(gameObject -> {
-            if(gameObject.getId() == GameID.Wall){
-                if(objectToCheck.getHitBox().intersects(gameObject.getHitBox())){
-
-                }
-            }
-        });
-    }
-
 }

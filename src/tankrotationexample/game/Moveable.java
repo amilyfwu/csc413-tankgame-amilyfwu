@@ -9,8 +9,6 @@ public abstract class Moveable extends GameObject {
     protected int vx, vy;
     protected float angle;
     protected int R;
-    //Rectangle hitBox;
-    //BufferedImage img;
 
     public Moveable(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
         super(x, y, img,id, handler);
@@ -46,10 +44,6 @@ public abstract class Moveable extends GameObject {
     abstract void moveForwards();
 
     abstract void setR();
-
-//    public Rectangle getHitBox(){
-//        return hitBox.getBounds();
-//    }
 
     private void checkBorder(){
         if (x < 30) {
