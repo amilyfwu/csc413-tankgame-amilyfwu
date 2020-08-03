@@ -4,25 +4,19 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class GameObject {
-    protected int x, y; // vx, vy;
-   // protected float angle;
-   // protected int R;
-    Rectangle hitBox;
-    BufferedImage img;
+    protected int x, y;
+    protected Rectangle hitBox;
+    protected BufferedImage img;
     protected GameID id;
     protected Handler handler;
 
-    public GameObject(int x, int y, BufferedImage img,GameID id,Handler handler) {
+    public GameObject(int x, int y, BufferedImage img, GameID id, Handler handler) {
         this.x = x;
         this.y = y;
-        //this.vx = vx;
-        //this.vy = vy;
-        //this.angle = angle;
         this.img = img;
-        this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
         this.id = id;
         this.handler = handler;
-
+        this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
     }
 
     public Handler getHandler() {

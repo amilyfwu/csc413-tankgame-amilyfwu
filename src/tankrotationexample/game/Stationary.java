@@ -4,9 +4,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class Stationary extends GameObject{
-    int state = 2;
+    private int state;
     public Stationary(int x, int y, BufferedImage img, GameID id, Handler handler) {
         super(x, y, img, id, handler);
+        this.state = 2;
     }
 
     public int getState() {

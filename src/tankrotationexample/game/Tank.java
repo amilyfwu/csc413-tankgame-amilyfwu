@@ -16,13 +16,7 @@ import java.util.ConcurrentModificationException;
  */
 public class Tank extends Moveable{
 
-
-    //private int x,y,vx,vy;
-    //private float angle;
-    //private int final R = 2;
     private final float ROTATIONSPEED = 3.0f;
-    //
-    //private Rectangle hitBox;
     private ArrayList<Bullet> ammo;
 
     //Tank stats
@@ -31,8 +25,6 @@ public class Tank extends Moveable{
     private int tempR = 2; //Temporary speed
     private int tempAttackPts = 10; //Temporary atk pts to pass into bullet class
 
-
-    //private BufferedImage img;
     private boolean UpPressed;
     private boolean DownPressed;
     private boolean RightPressed;
@@ -40,16 +32,8 @@ public class Tank extends Moveable{
     private boolean ShootPressed;
     private boolean collide;
 
-
     Tank(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
         super(x,y,vx,vy,angle,img,id,handler);
-        //this.x = x;
-        //this.y = y;
-        //this.vx = vx;
-        //this.vy = vy;
-        //this.img = img;
-        //this.angle = angle;
-        //this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
         this.ammo = new ArrayList<>();
     }
 
@@ -84,9 +68,9 @@ public class Tank extends Moveable{
     void setR(){
         R = tempR;
     }
+
     public void changeR(int changeR){ //modifying the speed for powerup
         tempR = changeR;
-        //System.out.println(tempR);
     }
 
     void toggleUpPressed() {
@@ -155,7 +139,7 @@ public class Tank extends Moveable{
                 }
                 //tank colliding with tank
                 else if ((gameIDTemp == GameID.Tank1 && this.getId() != GameID.Tank1) || (gameIDTemp == GameID.Tank2 && this.getId() != GameID.Tank2)) {
-                    if (this.getHitBox().intersects(gameObject.getHitBox())) {
+                    if (this.getHitBox().intersects(gameObject.getHitBox()) || gameObject.getHitBox().intersects(this.getHitBox())) {
                         setCollision(true);
                     }
                 }
@@ -169,7 +153,7 @@ public class Tank extends Moveable{
                             }
                             ((PowerUpHp) gameObject).setState(1);
                         }
-                        else if (gameObject instanceof PowerUpSpd){ //works
+                        else if (gameObject instanceof PowerUpSpd){
                             tempR++;
                             changeR(tempR);
                             ((PowerUpSpd) gameObject).setState(1);
@@ -249,7 +233,6 @@ public class Tank extends Moveable{
             Bullet b = new Bullet(x,y,vx,vy,angle, TRE.bulletImage,GameID.Bullet, this.handler);
             b.setAttackPts(getTempAttackPts()); //modify the attack points
             this.ammo.add(b);
-            //this.handler.addGameObject(b);
         }
         this.ammo.forEach(bullet -> bullet.update());
  //       for(int i = 0 ; i < this.ammo.size(); i++){
@@ -267,27 +250,14 @@ public class Tank extends Moveable{
     }
 
     private void moveBackwards() {
-//        vx = (int) Math.round(R*Math.cos(Math.toRadians(angle)));
-//        vy = (int) Math.round(R*Math.sin(Math.toRadians(angle)));
-//        x -= vx;
-//        y -= vy;
-//        checkBorder();
-//        this.hitBox.setLocation(x,y);
         setR();
         moveBackward();
     }
 
     void moveForwards() {
-        //vx = (int) Math.round(R*Math.cos(Math.toRadians(angle)));
-        //vy = (int) Math.round(R*Math.sin(Math.toRadians(angle)));
-        //x += vx;
-        //y += vy;
-        //checkBorder();
-        //this.hitBox.setLocation(x,y);
         setR();
         moveForward();
     }
-    //void checkBorder was here
 
     @Override
     public String toString() {
@@ -301,13 +271,9 @@ public class Tank extends Moveable{
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(this.img, rotation, null);
         //added 46:00
-        g2d.setColor(Color.BLUE);
-        //Handling maps vid
-        //if (b!= null) b.drawImage(g);
         this.ammo.forEach(bullet -> bullet.drawImage(g));
-        //use ammo.remove() to remove the bullet on screen
-
-        g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
+        //g2d.setColor(Color.BLUE);
+        //g2d.drawRect(x,y,this.img.getWidth(), this.img.getHeight());
     }
 
 

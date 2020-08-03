@@ -13,26 +13,43 @@ public abstract class Moveable extends GameObject {
     //BufferedImage img;
 
     public Moveable(int x, int y, int vx, int vy, float angle, BufferedImage img,GameID id, Handler handler) {
-        super(x, y, img,id,handler);
-        //this.x = x;
-        //this.y = y;
+        super(x, y, img,id, handler);
         this.vx = vx;
         this.vy = vy;
         this.angle = angle;
-       // this.img = img;
-       // this.hitBox = new Rectangle(x, y, this.img.getWidth(), this.img.getHeight());
+    }
 
+    public int getVx() {
+        return vx;
+    }
+
+    public void setVx(int vx) {
+        this.vx = vx;
+    }
+
+    public int getVy() {
+        return vy;
+    }
+
+    public void setVy(int vy) {
+        this.vy = vy;
+    }
+
+    public float getAngle() {
+        return angle;
+    }
+
+    public void setAngle(float angle) {
+        this.angle = angle;
     }
 
     abstract void moveForwards();
-   // abstract void update();
-    //abstract void changeR(int changeR);
-    abstract void setR();
-  //  abstract void drawImage(Graphics g);
 
-    public Rectangle getHitBox(){
-        return hitBox.getBounds();
-    }
+    abstract void setR();
+
+//    public Rectangle getHitBox(){
+//        return hitBox.getBounds();
+//    }
 
     private void checkBorder(){
         if (x < 30) {
@@ -57,6 +74,7 @@ public abstract class Moveable extends GameObject {
         checkBorder();
         this.hitBox.setLocation(x,y);
     }
+
     void moveBackward(){
         vx = (int) Math.round(R*Math.cos(Math.toRadians(angle)));
         vy = (int) Math.round(R*Math.sin(Math.toRadians(angle)));
@@ -65,6 +83,4 @@ public abstract class Moveable extends GameObject {
         checkBorder();
         this.hitBox.setLocation(x,y);
     }
-
-
 }

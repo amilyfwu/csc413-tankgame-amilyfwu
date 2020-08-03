@@ -31,7 +31,7 @@ public class TRE extends JPanel implements Runnable {
 
     private BufferedImage world; //the black screen
     private BufferedImage bg;
-    private Color myColor = new Color(80,81,130);
+    private Color myColor;
     //private Tank t1;
     //private Tank t2; //added
     private Launcher lf;
@@ -42,6 +42,7 @@ public class TRE extends JPanel implements Runnable {
 
     public TRE(Launcher lf){
         this.lf = lf;
+        this.myColor = new Color(80,81,130);
     }
 
     @Override
@@ -163,14 +164,14 @@ public class TRE extends JPanel implements Runnable {
                             break;
                         case "3": //unbreakable wall
                             //this.walls.add(unBr);
-                            this.handler.addGameObject(new Unbreakable(curCol*32, curRow*32, unBreakableWall,GameID.Wall,this.handler));
+                            this.handler.addGameObject(new Unbreakable(curCol*32, curRow*32, unBreakableWall,GameID.Wall, this.handler));
                             break;
                         case "4": //Speed powerup
-                            this.handler.addGameObject(new PowerUpSpd(curCol*32, curRow*32, powerUpSpd, GameID.PowerUp, this.handler));
+                            this.handler.addGameObject(new PowerUpSpd(curCol*32, curRow*32, powerUpSpd, GameID.PowerUp,this.handler));
                             this.floors.add(new Floor(curCol*32, curRow*32,floorTile2));
                             break;
                         case "5": //HP powerup
-                            this.handler.addGameObject(new PowerUpHp(curCol*32, curRow*32, powerUpHp, GameID.PowerUp, this.handler));
+                            this.handler.addGameObject(new PowerUpHp(curCol*32, curRow*32, powerUpHp, GameID.PowerUp,this.handler));
                             this.floors.add(new Floor(curCol*32, curRow*32,floorTile3));
                             break;
                         case "6": //2x dmg powerup

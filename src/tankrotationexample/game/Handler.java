@@ -8,33 +8,18 @@ public class Handler {
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
     private int x1,y1,x2,y2, hp1,hp2,live1,live2;
 
-    public ArrayList<GameObject> getGameObjects() {
+    public ArrayList<GameObject> getGameObjects() { //used in the tank class
         return gameObjects;
     }
 
     public void update(){
-//        for(int i = 0; i<gameObjects.size();i++){
-//            GameObject temp = gameObjects.get(i);
-//            temp.update(); //updates all the gameObjects
-//
-//            if(temp.getId() == GameID.Tank1){
-//                x1 = temp.getX();
-//                y1 = temp.getY();
-//            }
-//            if(temp.getId() == GameID.Tank2){
-//                x2 = temp.getX();
-//                y2 = temp.getY();
-//            }
-//
-//        }
-
         //this.gameObjects.forEach(gameObject -> gameObject.update());
         try {
             this.gameObjects.forEach(gameObject -> {
                 GameObject temp = gameObject;
                 temp.update();  //updates all the gameObjects
 
-                if (temp.getId() == GameID.Tank1) { //this is for the paintComponent
+                if (temp.getId() == GameID.Tank1) { //this is for the TRE paintComponent
                     x1 = temp.getX();
                     y1 = temp.getY();
                     hp1 = ((Tank)temp).getHp();
@@ -96,47 +81,6 @@ public class Handler {
     }
 
     public void resetObjects(){
-//        for (int i = 0; i<gameObjects.size();i++){ //make this into a foreach
-//            GameObject temp = gameObjects.get(i);
-//            if(temp.getId() == GameID.Tank1){
-//                temp.setX(200);
-//                temp.setY(200);
-//                ((Tank)temp).setHp(100);
-//                ((Tank)temp).setLives(3);
-//                ((Tank)temp).changeR(2);
-//
-//            }
-//            else if(temp.getId() == GameID.Tank2){
-//                temp.setX(700);
-//                temp.setY(700);
-//                ((Tank)temp).setHp(100);
-//                ((Tank)temp).setLives(3);
-//                ((Tank)temp).changeR(2);
-//            }
-//            else if(temp.getId() == GameID.Wall || temp.getId() == GameID.PowerUp){
-//                ((Stationary)temp).setState(2);
-//            }
-//            switch (temp.getId()){
-//                case Tank1:
-//                    temp.setX(200);
-//                    temp.setY(200);
-//                    ((Tank)temp).setHp(100);
-//                    ((Tank)temp).setLives(3);
-//                    ((Tank)temp).changeR(2);
-//                    break;
-//                case Tank2:
-//                    temp.setX(600);
-//                    temp.setY(600);
-//                    ((Tank)temp).setHp(100);
-//                    ((Tank)temp).setLives(3);
-//                    ((Tank)temp).changeR(2);
-//                    break;
-//                case Wall:
-//                case PowerUp:
-//                    ((Stationary)temp).setState(2);
-//                    break;
-//            }
-//        }
         gameObjects.forEach(gameObject -> {
 //            if(gameObject.getId() == GameID.Tank1){
 //                gameObject.setX(200);
@@ -159,11 +103,18 @@ public class Handler {
 //                ((Stationary)gameObject).setState(2);
 //            }
             switch (gameObject.getId()){
+                case Wall:
+                case PowerUp:
+                    ((Stationary)gameObject).setState(2);
+                    break;
                 case Tank1:
                     ((Tank)gameObject).setHp(100);
                     ((Tank)gameObject).setLives(3);
                     ((Tank)gameObject).changeR(2);
                     ((Tank)gameObject).setTempAttackPts(10);
+                    ((Tank)gameObject).setVx(0);
+                    ((Tank)gameObject).setVy(0);
+                    ((Tank)gameObject).setAngle(0);
                     gameObject.setX(200);
                     gameObject.setY(200);
                     break;
@@ -172,12 +123,11 @@ public class Handler {
                     ((Tank)gameObject).setLives(3);
                     ((Tank)gameObject).changeR(2);
                     ((Tank)gameObject).setTempAttackPts(10);
+                    ((Tank)gameObject).setVx(0);
+                    ((Tank)gameObject).setVy(0);
+                    ((Tank)gameObject).setAngle(180);
                     gameObject.setX(1800);
                     gameObject.setY(1800);
-                    break;
-                case Wall:
-                case PowerUp:
-                    ((Stationary)gameObject).setState(2);
                     break;
             }
         });
