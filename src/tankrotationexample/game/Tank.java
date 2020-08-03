@@ -134,8 +134,8 @@ public class Tank extends Moveable{
         this.collide = false;
     }
 
-    public Rectangle getBoundH(){
-        hitboxH.setBounds(getX()+getVx(),getY(),this.img.getWidth()+ getVx()/2, this.img.getHeight());
+    public Rectangle getBoundH(){ //two rectangle going slightly ahead of the tank rectangle to check for collision
+        hitboxH.setBounds(getX() + getVx(),getY(),this.img.getWidth() + getVx()/2, this.img.getHeight());
         return hitboxH;
     }
     public Rectangle getBoundV(){
@@ -144,102 +144,114 @@ public class Tank extends Moveable{
     }
 
     private void doCollision2(){
-        try {
-            this.handler.getGameObjects().forEach(gameObject -> {
-                GameID gameIDTemp = gameObject.getId();
-                //tank colliding will walls
-                if (gameIDTemp == GameID.Wall && gameObject instanceof Wall) {
-                    if (this.getBoundH().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)) {
-                        //setCollision(true);
-                        if(getVx()> 0){ //right
-                            vx = 0;
-                            x = (int) gameObject.getHitBox().getX()-55;
-                            System.out.println("minX: "+(int) gameObject.getHitBox().getMinX() +" x:" + (int) gameObject.getHitBox().getX() + " my tanks x position: " + x);
-                        }else if(getVx() < 0){ //left
-                            vx = 0;
-                            x = (int) gameObject.getHitBox().getMaxX();
-                        }
-                    }
-                    else if(this.getBoundV().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)){
-                        if(getVy()>0){
-                            vy = 0;
-                            y = (int) gameObject.getHitBox().getY() -55;
-                        }else if(getVy()<0){
-                            vy = 0;
-                            y = (int) gameObject.getHitBox().getMaxY();
-                        }
-                    }
-                }
-                //tank colliding with tank
-                else if ((gameIDTemp == GameID.Tank1 && this.getId() != GameID.Tank1) || (gameIDTemp == GameID.Tank2 && this.getId() != GameID.Tank2)) {
-                    if (this.getHitBox().intersects(gameObject.getHitBox()) || gameObject.getHitBox().intersects(this.getHitBox())) {
-                        setCollision(true);
-                    }
-                }
-                //tank colliding with PowerUps
-                else if(gameIDTemp == GameID.PowerUp && ((Stationary) gameObject).getState() == 2){
-                    if(this.getHitBox().intersects(gameObject.getHitBox())){
-                        //powerup : hp, speed, and 2x damage
-                        if(gameObject instanceof PowerUpHp){
-                            if(hp < 100){
-                                setHp(getHp() + 10);
-                            }
-                            ((PowerUpHp) gameObject).setState(1);
-                        }
-                        else if (gameObject instanceof PowerUpSpd){
-                            tempR++;
-                            changeR(tempR);
-                            ((PowerUpSpd) gameObject).setState(1);
-                            //System.out.println("im speed " + tempR);
-                        }
-                        else if (gameObject instanceof PowerUp2xDmg){
-                            setTempAttackPts(getTempAttackPts()*2);
-                            ((PowerUp2xDmg) gameObject).setState(1);
-                        }
-                    }
+        this.handler.getGameObjects().forEach(gameObject -> {
+            GameID gameIDTemp = gameObject.getId();
+            //tank colliding will walls
+            if (gameIDTemp == GameID.Wall && gameObject instanceof Wall) {
+                checkWallCollision(gameObject);
+            }
+            //tank colliding with tank
+            else if ((gameIDTemp == GameID.Tank1 && this.getId() != GameID.Tank1) || (gameIDTemp == GameID.Tank2 && this.getId() != GameID.Tank2)) {
+                checkTankCollision(gameObject);
+            }
+            //tank colliding with PowerUps
+            else if(gameIDTemp == GameID.PowerUp && ((Stationary) gameObject).getState() == 2){
+                checkPowerUpCollision(gameObject);
+            }
+
+            //bullets colliding with everything
+            //exclude the tank that is shooting the bullet
+            if (gameIDTemp != this.getId()) {
+                try {
+                    //checking bullet Collision
+                    this.ammo.forEach(bullet -> {
+                        //bullet hitting gameObjects and removing that bullet
+                        checkBulletCollision(gameObject,bullet,gameIDTemp);
+                    });
+                } catch (ConcurrentModificationException ex) {}
+            }
+        });
+    }
+
+    private void checkBulletCollision(GameObject gameObject, Bullet bullet,GameID gameIDTemp) {
+        if (bullet.getHitBox().intersects(gameObject.getHitBox())) {
+            if((gameIDTemp == GameID.Wall && gameObject instanceof Breakable && ((Breakable) gameObject).getState() == 1) || gameIDTemp == GameID.PowerUp){
+                //bullets ignore breakable walls that were already broken, power ups, if bullet reaches the outer walls
+            }
+            else{
+                this.ammo.remove(bullet);
+            }
+            if (gameIDTemp == GameID.Tank1 || gameIDTemp == GameID.Tank2) { //if the bullet hit the tank reduce the hp or lives
+                //health bar
+                ((Tank)gameObject).setHp(((Tank)gameObject).getHp() - bullet.getAttackPts());
+                //lives left check
+                //if hp is less than or equal to zero
+                // the live count reduces by one and the hp is reset to 100 again
+                if(((Tank)gameObject).getHp() <= 0){
+                    ((Tank)gameObject).setLives(((Tank)gameObject).getLives() - 1);
+                    ((Tank)gameObject).setHp(100);
                 }
 
-                //bullets colliding with everything
-                //exclude the tank that is shooting the bullet
-                if (gameIDTemp != this.getId()) {
-                    try {
-                        //checking bullet Collision
-                        this.ammo.forEach(bullet -> {
-                            //bullet hitting gameObjects and removing that bullet
-                            if (bullet.getHitBox().intersects(gameObject.getHitBox())) {
-                                if((gameIDTemp == GameID.Wall && gameObject instanceof Breakable && ((Breakable) gameObject).getState() == 1) || gameIDTemp == GameID.PowerUp){
-                                    //bullets ignore breakable walls that were already broken, power ups, if bullet reaches the outer walls
-                                }
-                                else{
-                                    this.ammo.remove(bullet);
-                                }
-                                if (gameIDTemp == GameID.Tank1 || gameIDTemp == GameID.Tank2) { //if the bullet hit the tank reduce the hp or lives
-                                    //health bar
-                                    ((Tank)gameObject).setHp(((Tank)gameObject).getHp() - bullet.getAttackPts());
-                                    //lives left check
-                                    //if hp is less than or equal to zero
-                                    // the live count reduces by one and the hp is reset to 100 again
-                                    if(((Tank)gameObject).getHp() <= 0){
-                                        ((Tank)gameObject).setLives(((Tank)gameObject).getLives() - 1);
-                                        ((Tank)gameObject).setHp(100);
-                                    }
+            }
+            else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) { //if bullet hits a breakable wall, breakable wall breaks
+                ((Breakable) gameObject).setState(1);
+                //if getState is more than zero reduce the state by 1;
+                //if getState is zero dont do anything
+            }
+        }
+        if(bullet.isBorderBullet()){ //if the bullet is on the outer walls
+            this.ammo.remove(bullet);
+        }
+    }
 
-                                }
-                                else if (gameIDTemp == GameID.Wall && gameObject instanceof Breakable) { //if bullet hits a breakable wall, breakable wall breaks
-                                    ((Breakable) gameObject).setState(1);
-                                    //if getState is more than zero reduce the state by 1;
-                                    //if getState is zero dont do anything
-                                }
-                            }
-                            if(bullet.isBorderBullet()){ //if the bullet is on the outer walls
-                                this.ammo.remove(bullet);
-                            }
-                        });
-                    } catch (ConcurrentModificationException ex) {}
+    private void checkPowerUpCollision(GameObject gameObject) {
+        if(this.getHitBox().intersects(gameObject.getHitBox())){
+            //powerup : hp, speed, and 2x damage
+            if(gameObject instanceof PowerUpHp){
+                if(hp < 100){
+                    setHp(getHp() + 10);
                 }
-            });
-        }catch (ConcurrentModificationException ex){}
+                ((PowerUpHp) gameObject).setState(1);
+            }
+            else if (gameObject instanceof PowerUpSpd){
+                tempR++;
+                changeR(tempR);
+                ((PowerUpSpd) gameObject).setState(1);
+                //System.out.println("im speed " + tempR);
+            }
+            else if (gameObject instanceof PowerUp2xDmg){
+                setTempAttackPts(getTempAttackPts()*2);
+                ((PowerUp2xDmg) gameObject).setState(1);
+            }
+        }
+    }
 
+    private void checkTankCollision(GameObject gameObject) {
+        if (this.getHitBox().intersects(gameObject.getHitBox()) || gameObject.getHitBox().intersects(this.getHitBox())) {
+            setCollision(true);
+        }
+    }
+
+    private void checkWallCollision(GameObject gameObject) {
+        if (this.getBoundH().getBounds().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)) {
+            //setCollision(true);
+            if(getVx()> 0){ //right
+                vx = 0;
+                x = (int) gameObject.getHitBox().getX() - 55;
+            }else if(getVx() < 0){ //left
+                vx = 0;
+                x = (int) gameObject.getHitBox().getMaxX() + 10;
+            }
+        }
+        if(this.getBoundV().getBounds().intersects(gameObject.getHitBox()) && (((Wall) gameObject).getState() == 2)){
+            if(getVy()>0){ //down
+                vy = 0;
+                y = (int) gameObject.getHitBox().getY() - 55;
+            }else if(getVy()<0){ //up
+                vy = 0;
+                y = (int) gameObject.getHitBox().getMaxY() + 10;
+            }
+        }
     }
 
     public void update() {
